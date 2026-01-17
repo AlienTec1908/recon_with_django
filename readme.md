@@ -3,7 +3,7 @@
 ---
 
 <p align="center">
-  <img src="AlienTec_Django_Recon.png" alt="AlienTec Live Recon Cover" width="50%" style="height: 20rem;">
+  <img src="AlienTec_Django_Recon1.png" alt="AlienTec Live Recon Cover" width="50%" style="height: 20rem;">
 </p>
 
 <p align="center">
