@@ -14,178 +14,186 @@ Hands-off scanning · Live findings · Senior-grade workflows
 ![Status](https://img.shields.io/badge/Status-Phase%201%20Live%20/%20Phase%202--3%20Dev-orange.svg)
 ![GitHub Stars](https://img.shields.io/github/stars/AlienTec1908/recon_with_django?style=social)
 
+ 
 ---
-
-## 🧬 Overview
-
-**AlienTec Django Recon** is a **modular, event-driven reconnaissance framework** built for
-🧑‍💻 **professional offensive security** and **real-world recon operations**.
-
-Core philosophy:
-
-* 🧠 Logic-driven orchestration
-* 🔁 Live signal feedback
-* ⚙️ Rule-based scan execution
-* 🚫 No blind or useless scans
-
-This repository exposes **Phase 1 only** as a **controlled showcase release**.
+Alles klar. **Professionell, technisch, Englisch, sauberes Markdown.**
+Hier ist die **überarbeitete und erweiterte README‑Sektion** für **Phase 1 – Operation & Architecture**, passend für GitHub und dein Projekt‑Niveau.
+Du kannst **alles 1:1 übernehmen**.
 
 ---
 
-## 🧱 Project Scope
+# ⚙️ Installation & Operation — Phase 1
 
-This repository includes:
+## 📌 Scope of This Repository
 
-* ⚙️ **Phase 1 – Core Recon Orchestration** *(implemented)*
-* 🧪 **Phase 2 – Deep Enumeration Subroutines (45+ modules)** *(in development)*
-* 📊 **Phase 3 – Reporting, Correlation & Intelligence Layer** *(planned)*
+This repository currently contains **Phase 1 (Live Recon Showcase)** of the **AlienTec Django Recon Framework**.
 
-Only **Phase 1** is active in this public version.
+* ✅ Phase 1: **Active Recon + Live Visualization**
+* 🚧 Phase 2: **Subroutines (≈45 modules)** — *in development*
+* 🚧 Phase 3: **Reporting & Correlation Engine** — *planned*
 
----
-
-## ⚙️ Phase 1 – Architecture Overview
-
-Phase 1 introduces a **central Orchestrator** acting as a
-🧠 **rule engine**, 🛰️ **signal router**, and ⚙️ **execution controller**.
-
-The Orchestrator:
-
-* 📂 Loads system logic definitions
-* 🧩 Builds execution chains dynamically
-* 🧪 Validates scan prerequisites
-* 📡 Reacts to live findings
-* 🔒 Blocks invalid execution paths
-
-No scan runs without context.
+Phase 1 is intentionally released as a **reduced, showcase version** to demonstrate architecture, orchestration, and live systems.
 
 ---
 
-## 🧩 Core Systems (Phase 1)
+## 🧩 Requirements
 
-### 🧭 1. Start Scan System (Entry Point)
-
-* 🎯 Accepts target input (IP / range)
-* 🚀 Triggers orchestration
-* 🧠 Hands control to the Orchestrator immediately
-* 🚫 Executes **no scans directly**
-
-Purpose:
-A clean, logic-free entry layer.
+* 🐧 **Linux** (recommended: Kali Linux)
+* 🐍 **Python 3.11+**
+* 📦 `pip`
+* 🌐 Network access (for scanning targets)
 
 ---
 
-### 🧠 2. Orchestrator (Central Control Layer)
+## 📦 Installation
 
-The Orchestrator is the **core intelligence layer**.
+```bash
+git clone https://github.com/AlienTec1908/recon_with_django.git
+cd recon_with_django
+```
 
-Responsibilities:
+(Optional but recommended)
 
-* 🧾 Parse all system logic files
-* 🧮 Build ordered execution lists
-* 🧠 Enforce rule conditions
-* 📊 Track scan state
-* 🔁 Dispatch scans
-* 📡 Receive live parser signals
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-It decides **what runs, when, and why**.
+Install dependencies:
 
----
-
-### 📡 3. Live Parser System
-
-* 🔍 Parses scan output in real time
-* 🧬 Extracts high-value signals
-* 🧾 Normalizes findings into JSON
-* 📡 Signals the Orchestrator
-
-Examples:
-
-* 🌐 HTTP / HTTPS detected
-* 🛠️ Service identified
-* ✅ Scan completed
-* 🚫 Scan useless → blocked
+```bash
+pip install -r requirements.txt
+```
 
 ---
 
-### 🗂️ 4. Tab System (Contextual Dispatcher)
+## 🗂️ Relevant Project Structure
 
-The Tab System is **execution-only**, not decision-making.
-
-It:
-
-* 🧠 Receives commands from the Orchestrator
-* 🧵 Spawns scans in isolated tabs
-* 🌐 Binds scans to valid services
-* 🧼 Keeps logic clean and separated
-
-Tabs appear **only when justified**.
-
----
-
-### 🖥️ 5. UI Layer (Phase 1 Scope)
-
-The UI is **read-only intelligence**, not control logic.
-
-Displays:
-
-* ⚙️ Active scans
-* 📄 Finished scans
-* 📡 Live findings
-* 🧵 Context-based tabs
-* 🧠 Execution order visibility
+```text
+recon_with_django/
+├── manage.py                     # Django entry point
+├── engine_api.py                 # Orchestrator & API layer (FastAPI)
+├── requirements.txt
+├── recon_engine/                 # Core orchestration logic
+├── recon_livesensor_project/     # Live sensor & UI bridge
+├── scanner/                      # Phase 1 scan modules
+├── back.index.html               # Frontend entry point
+└── readme.md
+```
 
 ---
 
-## 🔁 Execution Flow (Simplified)
+## 🧠 Architecture Overview (Phase 1)
 
-1. ▶️ User presses **Start**
-2. 🧠 Orchestrator parses system logic
-3. ⚙️ Initial recon validated & launched
-4. 📡 Live parser extracts signals
-5. 🧠 Orchestrator evaluates conditions
-6. 🌐 Contextual scans unlocked
-7. 🗂️ Tabs spawn valid scans
-8. 📊 Results update continuously
+Phase 1 follows a **strict modular orchestration model**:
+
+* Every system is an **isolated module**
+* No module directly controls another module
+* **All coordination happens via the Phase‑1 Orchestrator**
+* Communication is handled through **JSON state & output files**
+
+Core principle:
+
+> **Modules do not know each other — the Orchestrator knows all.**
 
 ---
 
-## 🧠 Design Rationale
+## 🚀 Running the Framework (Phase 1)
 
-This architecture avoids:
+### 1️⃣ Django Core (UI / Structure)
 
-* 🚫 Blind scan chains
-* 🚫 Hardcoded pipelines
-* 🚫 Tool spamming
-* 🚫 Context-less execution
+```bash
+python manage.py migrate
+python manage.py runserver 127.0.0.1:8000
+```
 
-It enables:
+Django is used for:
 
-* 🧠 Senior-grade recon logic
-* 🛰️ Environment awareness
-* 📉 High signal-to-noise ratio
-* 🧩 Clean Phase 2 & 3 expansion
+* UI integration
+* State representation
+* Project structure
+
+---
+
+### 2️⃣ Orchestrator & Scan Engine (Mandatory)
+
+The actual scan logic is executed via **FastAPI + Uvicorn**:
+
+```bash
+uvicorn engine_api:app --reload --port 8001
+```
+
+This starts:
+
+* 🧠 Phase‑1 Orchestrator
+* 📡 Live parser pipeline
+* ⚙️ Scan dispatch engine
+* 📊 State & progress tracking
+
+---
+
+## 🌐 Access Points
+
+* **Orchestrator / API**
+
+  ```
+  http://127.0.0.1:8001
+  ```
+
+* **Frontend (UI)**
+
+  ```
+  http://127.0.0.1:8000
+  ```
+
+---
+
+## ▶️ How Phase 1 Works (Operational Flow)
+
+1. User enters a target IP in the UI
+2. User clicks **Start Scan**
+3. The **Phase‑1 Orchestrator** takes full control
+
+The orchestrator then:
+
+* 🔍 launches `nmap_fullport`
+* 📡 parses findings into live JSON state
+* 🧠 evaluates discovered services
+* 🗂️ feeds Live‑Finding & HUD systems
+* 📊 updates progress & severity engines
+
+⚠️ **Scans are never started directly by the UI.**
+All execution logic lives inside the orchestrator.
+
+---
+
+## 🧠 Orchestration Rules (Phase 1)
+
+* `nmap_fullport` is the **primary data source**
+* HTTP‑based scans wait for Nmap service discovery
+* UDP & IPv6 scans may run asynchronously
+* Live‑Finding, HUD, OPS Panel poll shared JSON state
+* Progress & severity are calculated continuously
+
+---
+
+## ⚙️ Design Principles
+
+* 🧩 **Modular** — each system is standalone
+* 🔁 **Replaceable** — modules can be swapped without refactoring others
+* 📄 **State‑driven** — JSON is the single source of truth
+* 🧪 **Testable** — every module can run independently
+* 🚀 **Scalable** — Phase 2 & 3 plug into the same model
 
 ---
 
 ## ⚠️ Disclaimer
 
-This framework is intended for:
+This project is provided **for educational and authorized security testing only**.
 
-* 🎓 Education
-* 🧪 Research
-* 🛡️ Authorized security testing only
-
-You **must** have explicit permission to scan any target.
-
-The author assumes **no responsibility** for misuse or legal violations.
-
----
-
-## 📜 License
-
-MIT License
-See `LICENSE` for details.
+* Unauthorized scanning is illegal
+* The author assumes **no responsibility for misuse**
+* Always obtain **explicit permission** before scanning any target
 
 ---
 
