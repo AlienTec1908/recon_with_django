@@ -277,7 +277,48 @@ All execution logic lives inside the orchestrator.
 * Progress & severity are calculated continuously
 
 ---
+Ah, mein Fehler. Natürlich, das macht absolut Sinn.
 
+Hier sind dieselben Abschnitte, die ich erstellt habe, jetzt komplett auf Englisch und als reiner Markdown-Block zum Kopieren.
+
+---
+
+## ✨ Features
+
+*   **Autonomous Scanning:** Launch a full recon pipeline with a single click.
+*   **Live Finding System:** Results appear in the web interface in real-time—no more waiting for scans to finish.
+*   **Modular Architecture:** Every scan module is isolated and controlled by the central orchestrator.
+*   **Real-time Dashboard:** Visually track findings, progress, and severity via a heads-up display (HUD).
+*   **Scalable Design:** Built for easy integration of dozens of additional modules (Phase 2 & 3).
+
+---
+
+## 🛠️ Tech Stack
+
+*   **Backend & Orchestrator:** Python, FastAPI
+*   **Frontend:** Django, HTML, CSS, JavaScript
+*   **Scan Tools (Phase 1):** Nmap
+*   **Asynchronous Tasks:** Uvicorn, Asyncio
+
+---
+
+## 🗺️ Roadmap
+
+-   [✔️] **Phase 1: Live Recon Showcase** - Stable foundation with Nmap integration and live visualization.
+-   [🚧] **Phase 2: Subroutines & Advanced Scans** - Integration of ~45 modules for subdomain enumeration, directory bruteforcing, vulnerability scanning, etc.
+-   [🗓️] **Phase 3: Reporting & Correlation Engine** - Automated report generation, finding correlation, and attack timeline creation.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have ideas, find bugs, or want to add new features, please open an "Issue" first to discuss it. Pull Requests are also welcome.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 ## ⚙️ Design Principles
 
 * 🧩 **Modular** — each system is standalone
