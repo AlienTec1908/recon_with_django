@@ -1,59 +1,35 @@
-# AlienTec Live Recon Engine
+<p align="center">
+  <img src="AlienTec_Django_Recon.png" alt="AlienTec Live Recon Cover" width="50%" style="height: 20rem;">
+</p>
 
-Ein modulares, live-fähiges Reconnaissance-System mit Web-UI, das parallele Security-Scans ausführt, deren Output live darstellt und einzelne Scanner gezielt steuern kann.
+<p align="center">
+  <b>Autonomous Recon Framework for Offensive Security</b><br>
+  Hands-off scanning · Live findings · Senior-grade workflows
+</p>
 
-## Architektur
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/Platform-Linux-lightgrey.svg" alt="Platform">
+  <img src="https://img.shields.io/badge/Status-Phase%201%20Live%20/%20Phase%202--3%20Dev-orange.svg" alt="Status">
+  <img src="https://img.shields.io/github/stars/AlienTec1908/recon_with_django?style=social" alt="GitHub Stars">
+</p>
 
--   **Frontend & UI:** Django
--   **Backend & Scan-Engine:** FastAPI
+---
 
-## Voraussetzungen
+## ⚡ SYSTEM BLUEPRINT: Command Center V2.0
 
-Stelle sicher, dass die folgenden Kommandozeilen-Tools auf deinem System installiert sind (vorzugsweise auf einer Kali-Linux-Umgebung):
+### 🛠 Project Status
+- **Phase 1 (Discovery):** **INTEGRATED** - Core engine & initial recon.
+- **Phase 2 (Operations):** **UNDER DEVELOPMENT** - 45+ Subroutine modules & Intelligent Chessboard UI.
+- **Phase 3 (Reporting):** **PLANNED** - High-grade analytics & automated reporting.
 
--   `nmap`
--   `feroxbuster`
--   `nikto`
--   `curl`
+### 🏛️ Core Architecture
+- **Django (The Launcher):** UI Shell & User Management.
+- **FastAPI (The Engine):** Stateless Scan Engine streaming via WebSockets.
 
-**Wichtig:** Das Tool erwartet, dass sich die `seclists` unter `/usr/share/seclists/` befinden.
-
-## Installation & Start
-
-1.  **Repository klonen:**
-    ```bash
-    git clone <DEINE_GITHUB_URL_HIER>
-    cd recon_with_django
-    ```
-
-2.  **Virtuelle Umgebung erstellen und aktivieren:**
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-
-3.  **Abhängigkeiten installieren:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4.  **Datenbank migrieren:**
-    ```bash
-    python manage.py migrate
-    ```
-
-## Nutzung
-
-Das System benötigt zwei laufende Server.
-
-1.  **Terminal 1: Starte die FastAPI Scan-Engine:**
-    ```bash
-    uvicorn engine_api:app --host 0.0.0.0 --port 8001
-    ```
-
-2.  **Terminal 2: Starte den Django UI-Server:**
-    ```bash
-    python manage.py runserver
-    ```
-
-3.  **Öffne deinen Browser** und gehe zu `http://127.0.0.1:8000/`.
+### 🛠️ Installation
+```powershell
+git clone [https://github.com/AlienTec1908/recon_with_django.git](https://github.com/AlienTec1908/recon_with_django.git)
+cd recon_with_django
+pip install -r requirements.txt
+python manage.py migrate
