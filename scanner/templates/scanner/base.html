@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Sensor Recon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'scanner/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'scanner/OPS_Panel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'scanner/live_banner.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'scanner/Tabs.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'scanner/signal.css' %}">
+    <!-- Operations CSS hier laden, da wir es jetzt auf der Hauptseite brauchen -->
+    <link rel="stylesheet" type="text/css" href="{% static 'scanner/operations_style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div id="main-tab-bar">
+    <button class="main-tab-button active" id="btn-view-intel" onclick="showView('intelligence')">
+       Intelligence
+    </button>
+    <button class="main-tab-button" id="btn-view-ops" onclick="showView('operations')">
+       Operations
+    </button>
+</div>
+
+<div id="command-leiste">
+    <div class="leiste-logo"><span>AlienTec</span></div>
+    
+    <!-- Shared Command Content -->
+    <div id="cmd-content-intel">
+        {% block command_leiste_content %}{% endblock %}
+    </div>
+    
+    <!-- Operations specific header (hidden by default) -->
+    <div id="cmd-content-ops" style="display: none; padding: 15px; text-align: center; color: #00aaff; font-weight: bold; border-bottom: 1px solid #333;">
+        PHASE 2: OPERATIONS
+    </div>
+    
+    <div class="active-ops-header">
+        <span>Active Ops</span>
+    </div>
+    <div id="active-ops-list"></div>
+</div>
+
+<div id="page-wrapper">
+    <!-- VIEW 1: INTELLIGENCE (Standard) -->
+    <div id="view-intelligence" class="view-section" style="display: block;">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- VIEW 2: OPERATIONS (Versteckt, Code direkt hier integriert) -->
+    <div id="view-operations" class="view-section" style="display: none;">
+        <div class="phase-2-placeholder">
+            <h1>Operations Deck</h1>
+            <p>Engaging advanced subroutines based on intelligence gathered in Phase 1.</p>
+            <div id="operations-container" class="ops-grid">
+                <!-- Cards werden hier per JS reingeladen -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}{% endblock %}
+
+<script>
+    // Globale Funktion zum Umschalten der Ansichten
+    function showView(viewName) {
+        // 1. Buttons umschalten
+        document.querySelectorAll('.main-tab-button').forEach(b => b.classList.remove('active'));
+        if(viewName === 'intelligence') document.getElementById('btn-view-intel').classList.add('active');
+        if(viewName === 'operations') document.getElementById('btn-view-ops').classList.add('active');
+
+        // 2. Ansichten umschalten
+        document.getElementById('view-intelligence').style.display = viewName === 'intelligence' ? 'block' : 'none';
+        document.getElementById('view-operations').style.display = viewName === 'operations' ? 'block' : 'none';
+
+        // 3. Sidebar Header umschalten
+        document.getElementById('cmd-content-intel').style.display = viewName === 'intelligence' ? 'block' : 'none';
+        document.getElementById('cmd-content-ops').style.display = viewName === 'operations' ? 'block' : 'none';
+
+        // 4. Wenn Operations geöffnet wird, Daten laden (Funktion ist in index.html definiert)
+        if (viewName === 'operations' && typeof loadOperationsData === 'function') {
+            loadOperationsData();
+        }
+    }
+</script>
+</body>
+</html>

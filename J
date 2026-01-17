@@ -1,0 +1,266 @@
+# Nmap 7.95 scan initiated Wed Dec 31 17:04:30 2025 as: /usr/lib/nmap/nmap -sS -sC -sV -p- -Pn --min-rate 5000 -oA logs/192.168.2.188/nmap_full -oJ 192.168.2.188 logs/192.168.2.188/full.json
+Unable to split netmask from target expression: "logs/192.168.2.188/full.jNmap Nmap scan report for 192.168.2.188
+Host is up (0.00029s latency).
+Not shown: 65519 filtered tcp ports (no-response)
+PORT      STATE SERVICE       VERSION
+80/tcp    open  http          Apache httpd 2.4.48 (OpenSSL/1.1.1k PHP/8.0.9)
+|_http-server-header: Apache/2.4.48 (Win64) OpenSSL/1.1.1k PHP/8.0.9
+|_http-title: Index of /
+| http-ls: Volume /
+|   maxfiles limit reached (10)
+| SIZE  TIME              FILENAME
+| -     2024-11-13 13:25  bentec/
+| -     2021-09-18 14:25  bentec/1.%20Template%20Backup/
+| 111K  2019-05-11 22:31  bentec/1.jpg
+| 225   2021-09-16 04:13  bentec/1.test%20Datei.php
+| -     2022-12-21 11:21  bentec/2.%20Backup%20-%20Intranet/
+| -     2021-09-24 16:31  bentec/3.%20Funktionen%20und%20Test-LAB/
+| -     2023-07-05 16:31  bentec/15.%20Gemeinsam/
+| 4.3K  2021-09-30 16:41  bentec/AccessLog.php
+| -     2021-09-21 23:44  bentec/Bilder/
+| -     2025-12-31 17:01  bentec/Filme/
+|_
+| http-methods: 
+|_  Potentially risky methods: TRACE
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+443/tcp   open  ssl/http      Apache httpd 2.4.48 (OpenSSL/1.1.1k PHP/8.0.9)
+| ssl-cert: Subject: commonName=localhost
+| Not valid before: 2009-11-10T23:48:47
+|_Not valid after:  2019-11-08T23:48:47
+|_ssl-date: TLS randomness does not represent time
+| http-ls: Volume /
+|   maxfiles limit reached (10)
+| SIZE  TIME              FILENAME
+| -     2024-11-13 13:25  bentec/
+| -     2021-09-18 14:25  bentec/1.%20Template%20Backup/
+| 111K  2019-05-11 22:31  bentec/1.jpg
+| 225   2021-09-16 04:13  bentec/1.test%20Datei.php
+| -     2022-12-21 11:21  bentec/2.%20Backup%20-%20Intranet/
+| -     2021-09-24 16:31  bentec/3.%20Funktionen%20und%20Test-LAB/
+| -     2023-07-05 16:31  bentec/15.%20Gemeinsam/
+| 4.3K  2021-09-30 16:41  bentec/AccessLog.php
+| -     2021-09-21 23:44  bentec/Bilder/
+| -     2025-12-31 17:01  bentec/Filme/
+|_
+| tls-alpn: 
+|_  http/1.1
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_http-server-header: Apache/2.4.48 (Win64) OpenSSL/1.1.1k PHP/8.0.9
+|_http-title: Index of /
+445/tcp   open  microsoft-ds?
+1042/tcp  open  afrog?
+| fingerprint-strings: 
+|   DNSStatusRequestTCP, DNSVersionBindReqTCP, Help, Kerberos, RPCCheck, RTSPRequest, SMBProgNeg, SSLSessionReq, TLSSessionReq, TerminalServerCookie, X11Probe: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|   GetRequest: 
+|     HTTP/1.1 404 Not Found
+|     Vary: Origin
+|     Content-Security-Policy: default-src 'self'
+|     X-DNS-Prefetch-Control: off
+|     Expect-CT: max-age=0
+|     X-Frame-Options: SAMEORIGIN
+|     Strict-Transport-Security: max-age=15552000; includeSubDomains
+|     X-Download-Options: noopen
+|     X-Content-Type-Options: nosniff
+|     X-Permitted-Cross-Domain-Policies: none
+|     Referrer-Policy: no-referrer
+|     X-XSS-Protection: 0
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 139
+|     Date: Wed, 31 Dec 2025 16:05:08 GMT
+|     Connection: close
+|     <!DOCTYPE html>
+|     <html lang="en">
+|     <head>
+|     <meta charset="utf-8">
+|     <title>Error</title>
+|     </head>
+|     <body>
+|     <pre>Cannot GET /</pre>
+|     </body>
+|     </html>
+|   HTTPOptions: 
+|     HTTP/1.1 204 No Content
+|     Vary: Origin, Access-Control-Request-Headers
+|     Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE
+|     Content-Length: 0
+|     Date: Wed, 31 Dec 2025 16:05:08 GMT
+|_    Connection: close
+1043/tcp  open  ssl/boinc?
+| tls-alpn: 
+|_  http/1.1
+|_ssl-date: TLS randomness does not represent time
+| fingerprint-strings: 
+|   DNSVersionBindReqTCP, Kerberos, RPCCheck, SMBProgNeg, SSLSessionReq, X11Probe: 
+|     HTTP/1.1 400 Bad Request
+|     Connection: close
+|   FourOhFourRequest: 
+|     HTTP/1.1 404 Not Found
+|     Vary: Origin
+|     Content-Security-Policy: default-src 'self' blob: 127.0.0.1:1042 127.0.0.1:1043;script-src 'self' 'unsafe-inline';style-src 'self';connect-src 'self' ws: wss: blob: 127.0.0.1:1042 127.0.0.1:1043 127.0.0.1:9013 127.0.0.1:9014;worker-src 'self' blob: 127.0.0.1:1042 127.0.0.1:1043;img-src 'self' data: blob: 127.0.0.1:1042 127.0.0.1:1043
+|     X-DNS-Prefetch-Control: off
+|     Expect-CT: max-age=0
+|     X-Frame-Options: SAMEORIGIN
+|     Strict-Transport-Security: max-age=15552000; includeSubDomains
+|     X-Download-Options: noopen
+|     X-Content-Type-Options: nosniff
+|     X-Permitted-Cross-Domain-Policies: none
+|     Referrer-Policy: no-referrer
+|     X-XSS-Protection: 0
+|     Date: Wed, 31 Dec 2025 16:05:19 GMT
+|     Connection: close
+|   GetRequest: 
+|     HTTP/1.1 404 Not Found
+|     Vary: Origin
+|     Content-Security-Policy: default-src 'self'
+|     X-DNS-Prefetch-Control: off
+|     Expect-CT: max-age=0
+|     X-Frame-Options: SAMEORIGIN
+|     Strict-Transport-Security: max-age=15552000; includeSubDomains
+|     X-Download-Options: noopen
+|     X-Content-Type-Options: nosniff
+|     X-Permitted-Cross-Domain-Policies: none
+|     Referrer-Policy: no-referrer
+|     X-XSS-Protection: 0
+|     Content-Type: text/html; charset=utf-8
+|     Content-Length: 139
+|     Date: Wed, 31 Dec 2025 16:05:19 GMT
+|     Connection: close
+|     <!DOCTYPE html>
+|     <html lang="en">
+|     <head>
+|     <meta charset="utf-8">
+|     <title>Error</title>
+|     </head>
+|     <body>
+|     <pre>Cannot GET /</pre>
+|     </body>
+|     </html>
+|   HTTPOptions: 
+|     HTTP/1.1 204 No Content
+|     Vary: Origin, Access-Control-Request-Headers
+|     Access-Control-Allow-Methods: GET,HEAD,PUT,PATCH,POST,DELETE
+|     Content-Length: 0
+|     Date: Wed, 31 Dec 2025 16:05:19 GMT
+|_    Connection: close
+| ssl-cert: Subject: 
+| Subject Alternative Name: URI:http://example.org/webid#me
+| Not valid before: 2025-12-31T09:44:31
+|_Not valid after:  2026-12-31T09:44:31
+3306/tcp  open  mysql         MariaDB 10.3.24 or later (unauthorized)
+3389/tcp  open  ms-wbt-server Microsoft Terminal Services
+|_ssl-date: 2025-12-31T16:07:02+00:00; 0s from scanner time.
+| rdp-ntlm-info: 
+|   Target_Name: GHOST
+|   NetBIOS_Domain_Name: GHOST
+|   NetBIOS_Computer_Name: GHOST
+|   DNS_Domain_Name: Ghost
+|   DNS_Computer_Name: Ghost
+|   Product_Version: 10.0.19041
+|_  System_Time: 2025-12-31T16:06:23+00:00
+| ssl-cert: Subject: commonName=Ghost
+| Not valid before: 2025-11-16T09:43:13
+|_Not valid after:  2026-05-18T09:43:13
+5040/tcp  open  unknown
+5357/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Service Unavailable
+5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Not Found
+7680/tcp  open  pando-pub?
+9012/tcp  open  ssl/websocket WebSocket++ 0.8.1
+| ssl-cert: Subject: commonName=Peter Thorson/organizationName=Zaphoyd Studios/stateOrProvinceName=Illinois/countryName=US
+| Not valid before: 2011-11-15T21:20:06
+|_Not valid after:  2012-11-14T21:20:06
+|_ssl-date: TLS randomness does not represent time
+9013/tcp  open  websocket     WebSocket++ 0.8.1
+49673/tcp open  msrpc         Microsoft Windows RPC
+2 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port1042-TCP:V=7.95%I=7%D=12/31%Time=695549B4%P=x86_64-pc-linux-gnu%r(G
+SF:etRequest,27E,"HTTP/1\.1\x20404\x20Not\x20Found\r\nVary:\x20Origin\r\nC
+SF:ontent-Security-Policy:\x20default-src\x20'self'\r\nX-DNS-Prefetch-Cont
+SF:rol:\x20off\r\nExpect-CT:\x20max-age=0\r\nX-Frame-Options:\x20SAMEORIGI
+SF:N\r\nStrict-Transport-Security:\x20max-age=15552000;\x20includeSubDomai
+SF:ns\r\nX-Download-Options:\x20noopen\r\nX-Content-Type-Options:\x20nosni
+SF:ff\r\nX-Permitted-Cross-Domain-Policies:\x20none\r\nReferrer-Policy:\x2
+SF:0no-referrer\r\nX-XSS-Protection:\x200\r\nContent-Type:\x20text/html;\x
+SF:20charset=utf-8\r\nContent-Length:\x20139\r\nDate:\x20Wed,\x2031\x20Dec
+SF:\x202025\x2016:05:08\x20GMT\r\nConnection:\x20close\r\n\r\n<!DOCTYPE\x2
+SF:0html>\n<html\x20lang=\"en\">\n<head>\n<meta\x20charset=\"utf-8\">\n<ti
+SF:tle>Error</title>\n</head>\n<body>\n<pre>Cannot\x20GET\x20/</pre>\n</bo
+SF:dy>\n</html>\n")%r(HTTPOptions,D2,"HTTP/1\.1\x20204\x20No\x20Content\r\
+SF:nVary:\x20Origin,\x20Access-Control-Request-Headers\r\nAccess-Control-A
+SF:llow-Methods:\x20GET,HEAD,PUT,PATCH,POST,DELETE\r\nContent-Length:\x200
+SF:\r\nDate:\x20Wed,\x2031\x20Dec\x202025\x2016:05:08\x20GMT\r\nConnection
+SF::\x20close\r\n\r\n")%r(RTSPRequest,2F,"HTTP/1\.1\x20400\x20Bad\x20Reque
+SF:st\r\nConnection:\x20close\r\n\r\n")%r(RPCCheck,2F,"HTTP/1\.1\x20400\x2
+SF:0Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(DNSVersionBindReqTC
+SF:P,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\
+SF:n")%r(DNSStatusRequestTCP,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nCon
+SF:nection:\x20close\r\n\r\n")%r(Help,2F,"HTTP/1\.1\x20400\x20Bad\x20Reque
+SF:st\r\nConnection:\x20close\r\n\r\n")%r(SSLSessionReq,2F,"HTTP/1\.1\x204
+SF:00\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(TerminalServer
+SF:Cookie,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r
+SF:\n\r\n")%r(TLSSessionReq,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConn
+SF:ection:\x20close\r\n\r\n")%r(Kerberos,2F,"HTTP/1\.1\x20400\x20Bad\x20Re
+SF:quest\r\nConnection:\x20close\r\n\r\n")%r(SMBProgNeg,2F,"HTTP/1\.1\x204
+SF:00\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(X11Probe,2F,"H
+SF:TTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n");
+==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+SF-Port1043-TCP:V=7.95%T=SSL%I=7%D=12/31%Time=695549BF%P=x86_64-pc-linux-g
+SF:nu%r(GetRequest,27E,"HTTP/1\.1\x20404\x20Not\x20Found\r\nVary:\x20Origi
+SF:n\r\nContent-Security-Policy:\x20default-src\x20'self'\r\nX-DNS-Prefetc
+SF:h-Control:\x20off\r\nExpect-CT:\x20max-age=0\r\nX-Frame-Options:\x20SAM
+SF:EORIGIN\r\nStrict-Transport-Security:\x20max-age=15552000;\x20includeSu
+SF:bDomains\r\nX-Download-Options:\x20noopen\r\nX-Content-Type-Options:\x2
+SF:0nosniff\r\nX-Permitted-Cross-Domain-Policies:\x20none\r\nReferrer-Poli
+SF:cy:\x20no-referrer\r\nX-XSS-Protection:\x200\r\nContent-Type:\x20text/h
+SF:tml;\x20charset=utf-8\r\nContent-Length:\x20139\r\nDate:\x20Wed,\x2031\
+SF:x20Dec\x202025\x2016:05:19\x20GMT\r\nConnection:\x20close\r\n\r\n<!DOCT
+SF:YPE\x20html>\n<html\x20lang=\"en\">\n<head>\n<meta\x20charset=\"utf-8\"
+SF:>\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot\x20GET\x20/</pre>
+SF:\n</body>\n</html>\n")%r(HTTPOptions,D2,"HTTP/1\.1\x20204\x20No\x20Cont
+SF:ent\r\nVary:\x20Origin,\x20Access-Control-Request-Headers\r\nAccess-Con
+SF:trol-Allow-Methods:\x20GET,HEAD,PUT,PATCH,POST,DELETE\r\nContent-Length
+SF::\x200\r\nDate:\x20Wed,\x2031\x20Dec\x202025\x2016:05:19\x20GMT\r\nConn
+SF:ection:\x20close\r\n\r\n")%r(RPCCheck,2F,"HTTP/1\.1\x20400\x20Bad\x20Re
+SF:quest\r\nConnection:\x20close\r\n\r\n")%r(DNSVersionBindReqTCP,2F,"HTTP
+SF:/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(SSLS
+SF:essionReq,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnection:\x20clos
+SF:e\r\n\r\n")%r(Kerberos,2F,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nConnec
+SF:tion:\x20close\r\n\r\n")%r(SMBProgNeg,2F,"HTTP/1\.1\x20400\x20Bad\x20Re
+SF:quest\r\nConnection:\x20close\r\n\r\n")%r(X11Probe,2F,"HTTP/1\.1\x20400
+SF:\x20Bad\x20Request\r\nConnection:\x20close\r\n\r\n")%r(FourOhFourReques
+SF:t,2DA,"HTTP/1\.1\x20404\x20Not\x20Found\r\nVary:\x20Origin\r\nContent-S
+SF:ecurity-Policy:\x20default-src\x20'self'\x20blob:\x20127\.0\.0\.1:1042\
+SF:x20127\.0\.0\.1:1043;script-src\x20'self'\x20'unsafe-inline';style-src\
+SF:x20'self';connect-src\x20'self'\x20ws:\x20wss:\x20blob:\x20127\.0\.0\.1
+SF::1042\x20127\.0\.0\.1:1043\x20127\.0\.0\.1:9013\x20127\.0\.0\.1:9014;wo
+SF:rker-src\x20'self'\x20blob:\x20127\.0\.0\.1:1042\x20127\.0\.0\.1:1043;i
+SF:mg-src\x20'self'\x20data:\x20blob:\x20127\.0\.0\.1:1042\x20127\.0\.0\.1
+SF::1043\r\nX-DNS-Prefetch-Control:\x20off\r\nExpect-CT:\x20max-age=0\r\nX
+SF:-Frame-Options:\x20SAMEORIGIN\r\nStrict-Transport-Security:\x20max-age=
+SF:15552000;\x20includeSubDomains\r\nX-Download-Options:\x20noopen\r\nX-Co
+SF:ntent-Type-Options:\x20nosniff\r\nX-Permitted-Cross-Domain-Policies:\x2
+SF:0none\r\nReferrer-Policy:\x20no-referrer\r\nX-XSS-Protection:\x200\r\nD
+SF:ate:\x20Wed,\x2031\x20Dec\x202025\x2016:05:19\x20GMT\r\nConnection:\x20
+SF:close\r\n\r\n");
+MAC Address: 04:42:1A:06:81:54 (ASUSTek Computer)
+Service Info: Hosts: localhost, www.example.com; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_nbstat: NetBIOS name: GHOST, NetBIOS user: <unknown>, NetBIOS MAC: 04:42:1a:06:81:54 (ASUSTek Computer)
+| smb2-time: 
+|   date: 2025-12-31T16:06:22
+|_  start_date: N/A
+| smb2-security-mode: 
+|   3:1:1: 
+|_    Message signing enabled but not required
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Dec 31 17:07:03 2025 -- 1 IP address (1 host up) scanned in 153.44 seconds

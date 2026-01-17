@@ -1,0 +1,161 @@
+{% extends 'scanner/base.html' %}
+{% load static %}
+
+{% block title %}Operations{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'scanner/operations_style.css' %}">
+{% endblock %}
+
+{% block command_leiste_content %}
+    <div class="ops-header-title">PHASE 2: OPERATIONS</div>
+{% endblock %}
+
+{% block content %}
+<div class="phase-2-placeholder">
+    <h1>Operations Deck</h1>
+    <p>Engaging advanced subroutines based on intelligence gathered in Phase 1.</p>
+    <div id="operations-container" class="ops-grid">
+        <!-- Cards will be injected via JS -->
+    </div>
+</div>
+
+<script>
+    const sessionId = "{{ session_id|default_if_none:'' }}" || localStorage.getItem('current_session_id');
+    const container = document.getElementById('operations-container');
+    
+    const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+    const wsUrl = `${wsScheme}://${window.location.hostname}:8001/ws`; 
+    let opSocket = null;
+    let currentTarget = null;
+
+    async function init() {
+        if(!sessionId || sessionId === 'None') {
+            container.innerHTML = "<p>No active session found. Please run Intelligence Phase first.</p>";
+            return;
+        }
+
+        try {
+            const scanResponse = await fetch(`/api/scan/state/${sessionId}/`);
+            if(scanResponse.ok) {
+                const scanData = await scanResponse.json();
+                currentTarget = scanData.target;
+            }
+
+            const response = await fetch(`/api/operations/${sessionId}/`);
+            const data = await response.json();
+
+            if (data.operations && data.operations.length > 0) {
+                container.innerHTML = '';
+                data.operations.forEach(op => {
+                    const card = createOperationCard(op);
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = "<p>No specific operations available based on current intelligence.</p>";
+            }
+
+            connectWebSocket();
+
+        } catch (e) {
+            console.error("Failed to load operations", e);
+            container.innerHTML = "<p>Error loading operations data.</p>";
+        }
+    }
+
+    function createOperationCard(op) {
+        const card = document.createElement('div');
+        card.className = 'ops-card';
+        card.style.background = 'rgba(10, 25, 40, 0.6)';
+        card.style.border = '1px solid rgba(0, 170, 255, 0.4)';
+        card.style.padding = '20px';
+        card.style.borderRadius = '12px';
+        card.style.margin = '10px';
+        card.style.display = 'inline-flex';
+        card.style.flexDirection = 'column';
+        card.style.width = '350px';
+        card.style.verticalAlign = 'top';
+        card.style.height = '400px'; 
+        
+        card.innerHTML = `
+            <div class="ops-card-header" style="border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 10px; flex-shrink: 0;">
+                <h3 style="color: #00aaff; margin: 0;">${op.name}</h3>
+                <span class="ops-tag" style="font-size: 0.8em; color: #88c0d0;">[${op.category}]</span>
+            </div>
+            <p style="color: #ccc; font-size: 0.9em; height: 40px; overflow: hidden; flex-shrink: 0;">${op.description}</p>
+            
+            <div id="term-${op.slug}" style="background: #000; color: #0f0; font-family: monospace; font-size: 0.8em; padding: 10px; flex-grow: 1; overflow-y: auto; margin-bottom: 10px; border-radius: 4px; border: 1px solid #333;">
+                <span style="color: #555;">> Ready to launch...</span>
+            </div>
+
+            <button id="btn-${op.slug}" onclick="launchOperation('${op.slug}')" 
+                    style="width: 100%; padding: 10px; background: transparent; border: 1px solid #28a745; color: #28a745; cursor: pointer; border-radius: 6px; font-weight: bold; transition: all 0.2s; flex-shrink: 0;">
+                <i class="fa-solid fa-rocket"></i> Launch Sequence
+            </button>
+        `;
+        return card;
+    }
+
+    function connectWebSocket() {
+        opSocket = new WebSocket(wsUrl);
+        
+        opSocket.onopen = () => {
+            console.log("Operations Link Established.");
+        };
+
+        opSocket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'op_output') {
+                const term = document.getElementById(`term-${data.slug}`);
+                if(term) {
+                    const line = document.createElement('div');
+                    line.textContent = data.line;
+                    term.appendChild(line);
+                    term.scrollTop = term.scrollHeight;
+                }
+            }
+            
+            if (data.type === 'op_status') {
+                const btn = document.getElementById(`btn-${data.slug}`);
+                if(btn) {
+                    if (data.status === 'running') {
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fa-solid fa-gear fa-spin"></i> Running...';
+                        btn.style.borderColor = '#ffc107';
+                        btn.style.color = '#ffc107';
+                    } else if (data.status === 'completed') {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fa-solid fa-check"></i> Completed (Rerun)';
+                        btn.style.borderColor = '#00aaff';
+                        btn.style.color = '#00aaff';
+                    }
+                }
+            }
+        };
+
+        opSocket.onclose = () => {
+            setTimeout(connectWebSocket, 3000);
+        };
+    }
+
+    window.launchOperation = function(slug) {
+        if (!opSocket || opSocket.readyState !== WebSocket.OPEN) {
+            alert("Engine connection offline. Please wait...");
+            return;
+        }
+        if (!currentTarget) {
+            alert("Target information missing. Cannot launch.");
+            return;
+        }
+
+        opSocket.send(JSON.stringify({
+            command: "start_operation",
+            slug: slug,
+            target: currentTarget
+        }));
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+{% endblock %}

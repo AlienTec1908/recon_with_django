@@ -1,0 +1,627 @@
+{% extends 'scanner/base.html' %}
+{% load static %}
+
+{% block command_leiste_content %}
+<div class="leiste-form-container">
+    <input type="text" id="target-input" placeholder="Enter Target..." required>
+    <button type="button" id="start-scan-button" class="leiste-start-button">Start Scan</button>
+</div>
+<div class="leiste-stopp-container">
+    <button id="stop-all-button" class="leiste-stopp-button" title="Stop All Scans">
+        <i class="fa-solid fa-power-off"></i>
+        <span>Stop All</span>
+    </button>
+</div>
+<div class="threat-intel-container">
+    <div id="threat-circle" class="circle"></div>
+    <div id="threat-counts-table">
+        <div class="threat-count-row"><span class="sev-label-small">Hard</span><span id="sev-hard-count-ops" class="sev-count-ops sev-hard">0</span></div>
+        <div class="threat-count-row"><span class="sev-label-small">Medium</span><span id="sev-medium-count-ops" class="sev-count-ops sev-medium">0</span></div>
+        <div class="threat-count-row"><span class="sev-label-small">Easy</span><span id="sev-easy-count-ops" class="sev-count-ops sev-easy">0</span></div>
+        <div class="threat-count-row"><span class="sev-label-small">Info</span><span id="sev-info-count-ops" class="sev-count-ops sev-info">0</span></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="threat-hud" class="glass-panel">
+    <div class="hud-section-left">
+        <div class="hud-label">CURRENT OPERATION:</div>
+        <div id="current-operation-text" class="hud-operation-text">> STANDBY</div>
+        <div id="waveform" class="waveform-standby">
+            <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+    </div>
+    <div class="hud-section-right">
+        <div id="threat-matrix" class="threat-matrix">
+            <div class="matrix-cell hard"><span class="sev-label">HARD</span><span id="sev-hard-count" class="sev-count">0</span></div>
+            <div class="matrix-cell medium"><span class="sev-label">MEDIUM</span><span id="sev-medium-count" class="sev-count">0</span></div>
+            <div class="matrix-cell easy"><span class="sev-label">EASY</span><span id="sev-easy-count" class="sev-count">0</span></div>
+            <div class="matrix-cell info"><span class="sev-label">INFO</span><span id="sev-info-count" class="sev-count">0</span></div>
+        </div>
+    </div>
+</div>
+
+<div id="main-content">
+    <div class="progress-bar-container glass-panel">
+        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+        <div class="progress-overlay-content">
+            <div class="progress-circle-container">
+                <svg class="progress-ring" width="60" height="60">
+                   <circle class="progress-ring__track" stroke-width="4" fill="transparent" r="26" cx="30" cy="30"/>
+                   <circle id="progress-ring-circle" class="progress-ring__circle" stroke-width="4" fill="transparent" r="26" cx="30" cy="30"/>
+                </svg>
+                <span id="progress-steps" class="progress-circle-text">0/{{ total_scans }}</span>
+            </div>
+            <span id="progress-percentage" class="progress-percentage-text">0%</span>
+        </div>
+    </div>
+
+    <div id="main-display-grid">
+        <div id="findings-wrapper" class="glass-panel">
+            {% include 'scanner/banner.html' %}
+        </div>
+        <div id="console-wrapper" class="glass-panel">
+            <div id="tabbed-console">
+                <div class="tab-bar-wrapper">
+                    <div id="tab-bar" class="tab-bar">
+                        <button class="tab-button active" data-scan-id="nmap_full">Nmap Full</button>
+                        <button class="tab-button" data-scan-id="nmap_udp">Nmap UDP</button>
+                        <button class="tab-button" data-scan-id="curl_headers">Headers</button>
+                        <button class="tab-button" data-scan-id="curl_cookies">Cookies</button>
+                        <button class="tab-button" data-scan-id="nikto">Nikto</button>
+                        <button class="tab-button" data-scan-id="ferox_common">Feroxbuster</button>
+                    </div>
+                </div>
+                <div id="tab-content" class="tab-content">
+                    <div id="scan-card-nmap_full" class="scan-card active"><div class="scan-header"><h3>Nmap Full Scan</h3><div class="scan-status" id="status-nmap_full"><span class="status-pending">Pending</span></div></div><div class="sub-nav-bar"></div><pre></pre></div>
+                    <div id="scan-card-nmap_udp" class="scan-card"><div class="scan-header"><h3>Nmap UDP Scan</h3><div class="scan-status" id="status-nmap_udp"><span class="status-pending">Pending</span></div></div><div class="sub-nav-bar"></div><pre></pre></div>
+                    <div id="scan-card-curl_headers" class="scan-card"><div class="scan-header"><h3>Curl - HTTP Headers</h3><div class="scan-status" id="status-curl_headers"><span class="status-pending">Pending</span></div></div><div class="sub-nav-bar"></div><pre></pre></div>
+                    <div id="scan-card-curl_cookies" class="scan-card"><div class="scan-header"><h3>Curl - Cookie Jar</h3><div class="scan-status" id="status-curl_cookies"><span class="status-pending">Pending</span></div></div><div class="sub-nav-bar"></div><pre></pre></div>
+                    <div id="scan-card-nikto" class="scan-card"><div class="scan-header"><h3>Nikto Scan</h3><div class="scan-status" id="status-nikto"><span class="status-pending">Pending</span></div></div><div class="sub-nav-bar"></div><pre></pre></div>
+                    <div id="scan-card-ferox_common" class="scan-card"><div class="scan-header"><h3>Feroxbuster - Common Dirs</h3><div class="scan-status" id="status-ferox_common"><span class="status-pending">Pending</span></div></div><div class="sub-nav-bar"></div><pre></pre></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content-wrapper">
+        <div class="footer-content">
+            <div class="footer-left"><h3>Live Sensor Recon</h3><p>A dynamic and modular reconnaissance framework.</p></div>
+            <div class="footer-right"><p>Connect with the creator:</p><div class="social-icons"><a href="https://github.com/AlienTec1908" target="_blank" rel="noopener noreferrer" class="social-link github"><i class="fa-brands fa-github"></i> GitHub</a><a href="https://hackmyvm.eu/public/?u=darkspirit" target="_blank" rel="noopener noreferrer" class="social-link hackmyvm"><i class="fa-solid fa-trophy"></i> HackMyVM</a></div></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 Live Sensor Recon. All Rights Reserved.</p></div>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const startScanButton = document.getElementById('start-scan-button');
+    const targetInput = document.getElementById('target-input');
+    const stopAllButton = document.getElementById('stop-all-button');
+    const activeOpsList = document.getElementById('active-ops-list');
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    const progressPercentageText = document.getElementById('progress-percentage');
+    const progressStepsText = document.getElementById('progress-steps');
+    const progressRing = document.getElementById('progress-ring-circle');
+    const progressSvg = document.querySelector('.progress-ring'); 
+    const currentOperationText = document.getElementById('current-operation-text');
+    const waveform = document.getElementById('waveform');
+    const sevHardCount = document.getElementById('sev-hard-count');
+    const sevMediumCount = document.getElementById('sev-medium-count');
+    const sevEasyCount = document.getElementById('sev-easy-count');
+    const sevInfoCount = document.getElementById('sev-info-count');
+    const threatCircle = document.getElementById('threat-circle');
+    const btnViewOps = document.getElementById('btn-view-ops');
+    
+    const radius = progressRing.r.baseVal.value;
+    const circumference = radius * 2 * Math.PI;
+    progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+    const totalScans = {{ total_scans }};
+    let completedScans = 0;
+    let severityCounts = { Hard: 0, Medium: 0, Easy: 0, Info: 0 };
+    let runningScanGroups = 0;
+    const websocketUrl = '{{ websocket_url }}';
+    
+    let currentSessionId = "{{ session_id|default_if_none:'' }}" || localStorage.getItem('current_session_id');
+    let currentTargetHost = null;
+
+    const SCAN_ICONS = {
+        'nmap_full': 'fa-magnifying-glass', 'ferox_common': 'fa-route', 'nikto': 'fa-shield-virus',
+        'nmap_udp': 'fa-satellite-dish', 'curl_headers': 'fa-file-lines', 'curl_cookies': 'fa-cookie-bite',
+        'default': 'fa-crosshairs'
+    };
+
+    function formatCount(num) { if(num < 1000) return num; if(num < 1000000) return (num/1000).toFixed(1).replace(/\.0$/,'') + 'k'; return (num/1000000).toFixed(1).replace(/\.0$/,'') + 'm'; }
+    function safeSet(id, value) { const el = document.getElementById(id); if(el) el.textContent = value; }
+    function getPillColor(label) { let hash = 0; for(let i=0;i<label.length;i++) hash = label.charCodeAt(i) + ((hash << 5) - hash); const colors = [["#007bff", "#ffffff"], ["#ffc107", "#000000"], ["#dc3545", "#ffffff"], ["#17a2b8", "#ffffff"], ["#6f42c1", "#ffffff"], ["#28a745", "#ffffff"], ["#6c757d", "#ffffff"], ["#fd7e14", "#000000"], ["#e83e8c", "#ffffff"]]; return colors[Math.abs(hash % colors.length)]; }
+
+    function switchMainTab(scanId) {
+        document.querySelectorAll('#tab-bar .tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.scan-card').forEach(card => card.classList.remove('active'));
+        const tabButton = document.querySelector(`#tab-bar .tab-button[data-scan-id="${scanId}"]`);
+        const scanCard = document.getElementById(`scan-card-${scanId}`);
+        if (tabButton) { tabButton.classList.remove('has-new-output'); tabButton.classList.add('active'); }
+        if (scanCard) scanCard.classList.add('active');
+    }
+
+    function filterTerminal(scanId, subScanId) {
+        const scanCard = document.getElementById(`scan-card-${scanId}`);
+        if (!scanCard) return;
+        scanCard.querySelectorAll('.sub-nav-button').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = scanCard.querySelector(`.sub-nav-button[data-sub-scan-id="${subScanId}"]`);
+        if (activeBtn) activeBtn.classList.add('active');
+        scanCard.querySelectorAll('.sub-scan-output').forEach(out => out.style.display = 'none');
+        const activeOutput = document.getElementById(subScanId);
+        if (activeOutput) activeOutput.style.display = 'block';
+    }
+
+    function recreateSubScanTab(scanName, subScanId, subScanName) {
+        const scanCard = document.getElementById(`scan-card-${scanName}`);
+        if (!scanCard) return;
+        const subNavBar = scanCard.querySelector('.sub-nav-bar');
+        const mainPre = scanCard.querySelector('pre');
+        if (subNavBar && mainPre && !document.getElementById(subScanId)) {
+            const button = document.createElement('button');
+            button.className = 'sub-nav-button';
+            button.dataset.subScanId = subScanId;
+            button.textContent = subScanName;
+            button.onclick = () => filterTerminal(scanName, subScanId);
+            subNavBar.appendChild(button);
+            const outputContainer = document.createElement('div');
+            outputContainer.id = subScanId;
+            outputContainer.className = 'sub-scan-output';
+            outputContainer.style.display = 'none';
+            mainPre.appendChild(outputContainer);
+            if (subNavBar.children.length === 1) { filterTerminal(scanName, subScanId); }
+        }
+    }
+
+    function resetUI() {
+        activeOpsList.innerHTML = ''; completedScans = 0; runningScanGroups = 0; severityCounts = { Hard: 0, Medium: 0, Easy: 0, Info: 0 }; 
+        sevHardCount.textContent = '0'; sevMediumCount.textContent = '0'; sevEasyCount.textContent = '0'; sevInfoCount.textContent = '0';
+        safeSet('sev-hard-count-ops', '0'); safeSet('sev-medium-count-ops', '0'); safeSet('sev-easy-count-ops', '0'); safeSet('sev-info-count-ops', '0');
+        currentOperationText.textContent = '> STANDBY';
+        safeSet('info-hostname', '...'); safeSet('info-ip', '...'); safeSet('info-location', '...'); safeSet('info-time', '...'); safeSet('info-os_type', '...');
+        waveform.className = 'waveform-standby';
+        updateThreatCircle(); updateProgressBar();
+        stopAllButton.classList.add('stopp-button-pressed');
+        document.querySelectorAll('.pills-container').forEach(c => c.innerHTML = '<span class="placeholder-pill">[x]</span>');
+        document.querySelectorAll('.sub-nav-bar').forEach(bar => bar.innerHTML = '');
+        document.querySelectorAll('.scan-card pre').forEach(pre => pre.innerHTML = '');
+        document.querySelectorAll('#tab-bar .tab-button').forEach(btn => { btn.classList.remove('status-running', 'status-completed', 'has-new-output'); btn.classList.add('status-pending'); });
+        if(btnViewOps) btnViewOps.classList.remove('notify-operations');
+        progressSvg.style.animation = 'rotate 2s linear infinite';
+        progressBarFill.style.width = '0%';
+        document.getElementById('operations-container').innerHTML = '';
+    }
+
+    function updateProgressBar() { const percentage = totalScans > 0 ? (completedScans / totalScans) * 100 : 0; const offset = circumference - (percentage / 100) * circumference; progressBarFill.style.width = `${percentage}%`; progressRing.style.strokeDashoffset = offset; progressStepsText.textContent = `${formatCount(completedScans)}/${formatCount(totalScans)}`; progressPercentageText.textContent = `${Math.round(percentage)}%`; }
+    
+    function updateThreatCircle() { 
+        // GEWICHTUNG ENTFERNT: Rein nach Anzahl (Quantity)
+        const totalCount = severityCounts.Hard + severityCounts.Medium + severityCounts.Easy;
+        
+        if (totalCount === 0) { 
+            threatCircle.style.background = '#333';
+            return; 
+        } 
+        
+        const hardPct = (severityCounts.Hard / totalCount) * 100;
+        const mediumPct = (severityCounts.Medium / totalCount) * 100;
+        
+        const hardEnd = hardPct;
+        const mediumEnd = hardEnd + mediumPct;
+        
+        threatCircle.style.background = `conic-gradient(#e53935 0% ${hardEnd}%, #ffa726 ${hardEnd}% ${mediumEnd}%, #28a745 ${mediumEnd}% 100%)`; 
+    }
+
+    function handlePrepareSubScan(data) { recreateSubScanTab(data.scan_name, data.sub_scan_id, data.sub_scan_name); }
+    
+    function handleOutput(data) {
+        if(data.type === 'op_output') {
+            const term = document.getElementById(`term-${data.slug}`);
+            if(term) {
+                const line = document.createElement('div');
+                line.textContent = data.line;
+                term.appendChild(line);
+                term.scrollTop = term.scrollHeight;
+            }
+            return;
+        }
+        
+        const mainTabButton = document.querySelector(`#tab-bar .tab-button[data-scan-id="${data.scan_name}"]`);
+        if (mainTabButton && !mainTabButton.classList.contains('status-running')) {
+            mainTabButton.classList.remove('status-pending');
+            mainTabButton.classList.add('status-running');
+        }
+        const outputContainer = document.getElementById(data.sub_scan_id);
+        if (outputContainer) {
+            let lineToRender = data.line;
+            if (data.line.startsWith('{')) {
+                try {
+                    const feroxData = JSON.parse(data.line);
+                    if (feroxData.type === 'response') lineToRender = `[${feroxData.status}] ${feroxData.method} ${feroxData.url}`;
+                } catch (e) {}
+            }
+            outputContainer.appendChild(document.createTextNode(lineToRender + '\n'));
+        }
+    }
+
+    function handleStatus(data) {
+        if(data.type === 'op_status') {
+            const btn = document.getElementById(`btn-${data.slug}`);
+            if(btn) {
+                if (data.status === 'running') {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-gear fa-spin"></i> Running...';
+                    btn.style.borderColor = '#ffc107'; btn.style.color = '#ffc107';
+                } else if (data.status === 'completed') {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Completed (Rerun)';
+                    btn.style.borderColor = '#00aaff'; btn.style.color = '#00aaff';
+                }
+            }
+            return;
+        }
+
+        if (data.line.toLowerCase().includes('starting')) {
+            runningScanGroups++;
+            currentOperationText.textContent = `> ${data.scan_display_name}`;
+            const activeOpId = `active-op-${data.scan_id}`;
+            if (!document.getElementById(activeOpId)) {
+                const activeOp = document.createElement('div'); activeOp.id = activeOpId; activeOp.className = 'active-ops-item';
+                const iconClass = SCAN_ICONS[data.scan_name_slug] || SCAN_ICONS['default'];
+                activeOp.innerHTML = `<div class="heartbeat"></div><i class="fa-solid ${iconClass}"></i><span>${data.scan_display_name}</span><div class="op-progress"></div>`;
+                activeOpsList.appendChild(activeOp);
+            }
+        } else if (data.line.toLowerCase().includes('completed')) {
+            runningScanGroups--;
+            const mainTabButton = document.querySelector(`#tab-bar .tab-button[data-scan-id="${data.scan_name}"]`);
+            if (mainTabButton) {
+                mainTabButton.classList.remove('status-running', 'status-pending');
+                mainTabButton.classList.add('status-completed');
+            }
+            const statusDiv = document.getElementById(`status-${data.scan_name_slug}`);
+            if(statusDiv) statusDiv.innerHTML = '<span class="status-finished">Completed</span>';
+
+            const activeOp = document.getElementById(`active-op-${data.scan_id}`);
+            if(activeOp) activeOp.remove();
+            completedScans++;
+            updateProgressBar();
+            
+            if (currentSessionId) {
+                fetch("{% url 'api_update_progress' %}", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ session_id: currentSessionId, completed_steps: completedScans })
+                });
+            }
+            
+            if (completedScans >= totalScans) {
+                finishScanSession();
+            }
+        }
+    }
+
+    function handleFinding(data) {
+        if (currentSessionId) {
+             fetch("{% url 'api_save_finding' %}", { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ session_id: currentSessionId, finding: data }) });
+        }
+        if (data.severity in severityCounts) {
+            severityCounts[data.severity]++;
+            sevHardCount.textContent = formatCount(severityCounts.Hard); sevMediumCount.textContent = formatCount(severityCounts.Medium); sevEasyCount.textContent = formatCount(severityCounts.Easy); sevInfoCount.textContent = formatCount(severityCounts.Info);
+            safeSet('sev-hard-count-ops', formatCount(severityCounts.Hard)); safeSet('sev-medium-count-ops', formatCount(severityCounts.Medium)); safeSet('sev-easy-count-ops', formatCount(severityCounts.Easy)); safeSet('sev-info-count-ops', formatCount(severityCounts.Info));
+            updateThreatCircle();
+        }
+        const container = document.getElementById(`findings-${data.category}`);
+        if (container) {
+            if (container.querySelector('.placeholder-pill')) container.innerHTML = '';
+            const pillId = `pill-${data.category}-${data.value}`.replace(/[^a-zA-Z0-9-_]/g, '');
+            if (!document.getElementById(pillId)) {
+                const pill = document.createElement('span'); pill.id = pillId; pill.className = 'finding-pill'; const colors = getPillColor(data.value);
+                pill.style.backgroundColor = colors[0]; pill.style.color = colors[1]; pill.textContent = data.value;
+                container.appendChild(pill);
+            }
+        }
+    }
+    
+    async function handleTargetInfo(data) {
+         safeSet('info-hostname', data.data.hostname); safeSet('info-ip', data.data.target_ip); safeSet('info-location', data.data.location); safeSet('info-time', data.data.start_time); safeSet('info-os_type', data.data.os_type);
+         currentTargetHost = data.data.hostname || data.data.target_ip;
+
+         const response = await fetch("{% url 'api_start_scan' %}", {
+             method: 'POST',
+             headers: {'Content-Type': 'application/json'},
+             body: JSON.stringify({ target: targetInput.value, target_info: data.data })
+         });
+         const result = await response.json();
+         if (result.session_id) {
+             currentSessionId = result.session_id;
+             localStorage.setItem('current_session_id', currentSessionId);
+             const sep = window.location.href.includes('?') ? '&' : '?';
+             history.pushState(null, '', window.location.href + sep + 'session_id=' + currentSessionId);
+         }
+    }
+
+    async function finishScanSession() {
+        currentOperationText.textContent = '> COMPLETED';
+        if (currentSessionId) {
+            await fetch("{% url 'api_end_scan' %}", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ session_id: currentSessionId })
+            });
+            showNewScansAvailable();
+        }
+    }
+
+    function showNewScansAvailable() {
+        if(btnViewOps) btnViewOps.classList.add('notify-operations');
+        if (!document.querySelector('.new-scans-available')) {
+             const newScansLink = document.createElement('div');
+             newScansLink.className = 'new-scans-available';
+             newScansLink.style.cursor = 'pointer';
+             newScansLink.innerHTML = `<i class="fa-solid fa-star"></i><span>New Scans Ready</span>`;
+             newScansLink.onclick = () => showView('operations');
+             if (activeOpsList) activeOpsList.insertBefore(newScansLink, activeOpsList.firstChild);
+        }
+    }
+
+    async function restoreState(sessionId) {
+        try {
+            const response = await fetch(`/api/scan/state/${sessionId}/`);
+            if (!response.ok) { localStorage.removeItem('current_session_id'); resetUI(); return; }
+            const state = await response.json();
+            
+            resetUI();
+            currentSessionId = sessionId;
+            if(targetInput) targetInput.value = state.target;
+            currentTargetHost = state.target;
+            
+            safeSet('info-hostname', state.target_info.hostname); 
+            safeSet('info-ip', state.target_info.target_ip);
+            safeSet('info-os_type', state.target_info.os_type); 
+            safeSet('info-time', state.target_info.start_time);
+
+            let tempSeverityCounts = { Hard: 0, Medium: 0, Easy: 0, Info: 0 };
+            let restoredScans = new Set();
+            
+            state.findings.forEach(finding => {
+                if (finding.severity in tempSeverityCounts) tempSeverityCounts[finding.severity]++;
+                const container = document.getElementById(`findings-${finding.category}`);
+                if (container) {
+                    if (container.querySelector('.placeholder-pill')) container.innerHTML = '';
+                    const pillId = `pill-${finding.category}-${finding.value}`.replace(/[^a-zA-Z0-9-_]/g, '');
+                    if (!document.getElementById(pillId)) {
+                        const pill = document.createElement('span'); pill.id = pillId; pill.className = 'finding-pill'; const colors = getPillColor(finding.value);
+                        pill.style.backgroundColor = colors[0]; pill.style.color = colors[1]; pill.textContent = finding.value;
+                        container.appendChild(pill);
+                    }
+                }
+                if (finding.category === 'open_ports') restoredScans.add('Nmap Full Scan');
+                if (finding.category === 'cookies' || finding.category === 'methods') restoredScans.add('HTTP Headers');
+                if (finding.category === 'vulns') restoredScans.add('Nikto Scan');
+            });
+
+            severityCounts = tempSeverityCounts;
+            sevHardCount.textContent = formatCount(severityCounts.Hard); sevMediumCount.textContent = formatCount(severityCounts.Medium);
+            sevEasyCount.textContent = formatCount(severityCounts.Easy); sevInfoCount.textContent = formatCount(severityCounts.Info);
+            safeSet('sev-hard-count-ops', formatCount(severityCounts.Hard)); safeSet('sev-medium-count-ops', formatCount(severityCounts.Medium));
+            safeSet('sev-easy-count-ops', formatCount(severityCounts.Easy)); safeSet('sev-info-count-ops', formatCount(severityCounts.Info));
+            updateThreatCircle();
+            
+            completedScans = state.completed_steps || 0;
+            updateProgressBar();
+            
+            if (activeOpsList.innerHTML === '') {
+                 if (state.is_complete) {
+                     restoredScans.forEach(scanName => {
+                        const restoredItem = document.createElement('div');
+                        restoredItem.className = 'active-ops-item';
+                        restoredItem.innerHTML = `<i class="fa-solid fa-check" style="color: #28a745;"></i><span>${scanName}</span>`;
+                        activeOpsList.appendChild(restoredItem);
+                     });
+                 } else {
+                     restoredScans.forEach(scanName => {
+                        const restoredItem = document.createElement('div');
+                        restoredItem.className = 'active-ops-item';
+                        restoredItem.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color: #ffc107;"></i><span>${scanName} (Restored)</span>`;
+                        activeOpsList.appendChild(restoredItem);
+                     });
+                 }
+            }
+
+            if (state.is_complete) {
+                currentOperationText.textContent = '> COMPLETED';
+                completedScans = totalScans;
+                updateProgressBar();
+                document.querySelectorAll('#tab-bar .tab-button').forEach(btn => btn.classList.add('status-completed'));
+                showNewScansAvailable();
+            } else if (completedScans > 0) {
+                 currentOperationText.textContent = '> DATA RESTORED';
+            }
+
+            const logResponse = await fetch(`/api/scan/logs/${sessionId}/`);
+            if (logResponse.ok) {
+                const logs = await logResponse.json();
+                for (const [subScanId, content] of Object.entries(logs)) {
+                    let scanName = '';
+                    let subName = 'Log';
+                    
+                    if (subScanId.startsWith('nmap_full')) { scanName = 'nmap_full'; subName = 'Default'; }
+                    else if (subScanId.startsWith('nmap_udp')) { scanName = 'nmap_udp'; subName = 'Default'; }
+                    else if (subScanId.startsWith('curl_headers')) { scanName = 'curl_headers'; subName = 'Default'; }
+                    else if (subScanId.startsWith('curl_cookies')) { scanName = 'curl_cookies'; subName = 'Default'; }
+                    else if (subScanId.startsWith('nikto')) { scanName = 'nikto'; subName = 'Default'; }
+                    else if (subScanId.startsWith('ferox_common')) { scanName = 'ferox_common'; subName = 'Default'; }
+                    
+                    if (subScanId.split('_').length > 2) {
+                        const parts = subScanId.split('_');
+                        subName = parts[parts.length - 1]; 
+                    }
+
+                    if (scanName) {
+                        recreateSubScanTab(scanName, subScanId, subName);
+                        const outputDiv = document.getElementById(subScanId);
+                        if (outputDiv) {
+                            outputDiv.textContent = content;
+                        }
+                    }
+                }
+            }
+        } catch(e) {
+            console.error("State restore failed:", e);
+            resetUI();
+        }
+    }
+
+    window.loadOperationsData = async function() {
+        const container = document.getElementById('operations-container');
+        if(!currentSessionId) {
+            container.innerHTML = "<p>No active session found. Please run Intelligence Phase first.</p>";
+            return;
+        }
+        try {
+            const response = await fetch(`/api/operations/${currentSessionId}/`);
+            const data = await response.json();
+            if (data.operations && data.operations.length > 0) {
+                container.innerHTML = '';
+                data.operations.forEach(op => {
+                    const card = document.createElement('div');
+                    card.className = 'ops-card';
+                    card.style.background = 'rgba(10, 25, 40, 0.6)';
+                    card.style.border = '1px solid rgba(0, 170, 255, 0.4)';
+                    card.style.padding = '20px';
+                    card.style.borderRadius = '12px';
+                    card.style.margin = '10px';
+                    card.style.display = 'inline-flex';
+                    card.style.flexDirection = 'column';
+                    card.style.width = '350px';
+                    card.style.verticalAlign = 'top';
+                    card.style.height = '400px'; 
+                    card.innerHTML = `
+                        <div class="ops-card-header" style="border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 10px; flex-shrink: 0;">
+                            <h3 style="color: #00aaff; margin: 0;">${op.name}</h3>
+                            <span class="ops-tag" style="font-size: 0.8em; color: #88c0d0;">[${op.category}]</span>
+                        </div>
+                        <p style="color: #ccc; font-size: 0.9em; height: 40px; overflow: hidden; flex-shrink: 0;">${op.description}</p>
+                        <div id="term-${op.slug}" style="background: #000; color: #0f0; font-family: monospace; font-size: 0.8em; padding: 10px; flex-grow: 1; overflow-y: auto; margin-bottom: 10px; border-radius: 4px; border: 1px solid #333;">
+                            <span style="color: #555;">> Ready to launch...</span>
+                        </div>
+                        <button id="btn-${op.slug}" onclick="launchOperation('${op.slug}')" 
+                                style="width: 100%; padding: 10px; background: transparent; border: 1px solid #28a745; color: #28a745; cursor: pointer; border-radius: 6px; font-weight: bold; transition: all 0.2s; flex-shrink: 0;">
+                            <i class="fa-solid fa-rocket"></i> Launch Sequence
+                        </button>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = "<p>No specific operations available based on current intelligence.</p>";
+            }
+        } catch (e) {
+            container.innerHTML = "<p>Error loading operations data.</p>";
+        }
+    };
+
+    window.launchOperation = function(slug) {
+        if (!window.currentWs || window.currentWs.readyState !== WebSocket.OPEN) {
+            alert("Engine connection offline. Cannot launch.");
+            return;
+        }
+        if (!currentTargetHost) {
+            alert("Target information missing. Cannot launch.");
+            return;
+        }
+        window.currentWs.send(JSON.stringify({
+            command: "start_operation",
+            slug: slug,
+            target: currentTargetHost
+        }));
+    };
+
+    function startScan() {
+        if (window.currentWs) window.currentWs.close();
+        resetUI();
+        stopAllButton.classList.remove('stopp-button-pressed');
+        const target = targetInput.value;
+        if (!target) { alert("Please enter a target."); return; }
+        
+        waveform.className = 'waveform-scanning';
+        progressSvg.style.animation = 'rotate 2s linear infinite'; 
+        
+        const ws = new WebSocket(websocketUrl);
+        window.currentWs = ws;
+        
+        ws.onopen = () => { 
+            localStorage.removeItem('current_session_id'); 
+            currentSessionId = null;
+            ws.send(JSON.stringify({ command: "start_scan", target: target })); 
+        };
+        
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if(data.type === 'op_output' || data.type === 'op_status') {
+                if(data.type === 'op_output') handleOutput(data);
+                if(data.type === 'op_status') handleStatus(data);
+            } else {
+                switch (data.type) {
+                    case 'prepare_sub_scan': handlePrepareSubScan(data); break;
+                    case 'output': handleOutput(data); break;
+                    case 'status': handleStatus(data); break;
+                    case 'finding': handleFinding(data); break;
+                    case 'target_info': handleTargetInfo(data); break;
+                    case 'intelligence_phase_complete': finishScanSession(); break;
+                }
+            }
+        };
+        
+        ws.onclose = () => { console.log("WS closed"); };
+    }
+    
+    async function stopAllScans() {
+        if(stopAllButton) stopAllButton.disabled=true; stopAllButton.classList.add('stopp-button-pressed');
+        
+        const runningScans = [];
+        activeOpsList.querySelectorAll('.active-ops-item span').forEach(el => runningScans.push(el.textContent));
+        
+        let shutdownHtml = '<table class="shutdown-table">';
+        if (runningScans.length > 0) {
+            runningScans.forEach(scanName => { shutdownHtml += `<tr><td>${scanName}</td><td><span class="shutdown-status-canceled">Canceled</span></td></tr>`; });
+        } else { shutdownHtml += `<tr><td>System</td><td><span class="shutdown-status-canceled">Stopped</span></td></tr>`; }
+        shutdownHtml += '</table>';
+        activeOpsList.innerHTML = shutdownHtml;
+        
+        document.querySelectorAll('.scan-status').forEach(div => { if(!div.querySelector('.status-finished')) div.innerHTML='<span class="status-canceled">CANCELED</span>'; });
+        currentOperationText.textContent = '> STOPPED';
+        waveform.className = 'waveform-standby';
+        progressSvg.style.animation = 'none';
+        progressBarFill.style.width = '0%';
+        progressStepsText.textContent = `${totalScans}/${totalScans}`;
+        
+        const apiUrl = websocketUrl.replace('ws://', 'http://').replace('/ws', '/api');
+        try { await fetch(`${apiUrl}/scans/stop_all`, { method: 'POST' }); } catch(e) {}
+        finally { if(stopAllButton) stopAllButton.disabled=false; }
+        
+        if (window.currentWs) window.currentWs.close();
+    }
+
+    document.querySelectorAll('#tab-bar .tab-button').forEach(button => button.addEventListener('click', () => switchMainTab(button.dataset.scanId)));
+    startScanButton.addEventListener('click', startScan);
+    stopAllButton.addEventListener('click', stopAllScans);
+    targetInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { e.preventDefault(); startScan(); } });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionFromUrl = urlParams.get('session_id');
+        if (sessionFromUrl) { restoreState(sessionFromUrl); }
+        else if (currentSessionId && currentSessionId !== 'null' && currentSessionId !== '') { 
+            const sep = window.location.href.includes('?') ? '&' : '?';
+            history.pushState(null, '', window.location.href + sep + 'session_id=' + currentSessionId);
+        } else { resetUI(); }
+    });
+</script>
+{% endblock %}

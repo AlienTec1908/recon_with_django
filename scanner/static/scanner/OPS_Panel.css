@@ -1,0 +1,303 @@
+#command-leiste {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 200px;
+    background-color: #1f1f1f;
+    border-right: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.leiste-logo {
+    font-weight: bold;
+    color: #00aaff;
+    text-align: center;
+    padding: 20px 10px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #333;
+    background: #2a2a2a;
+}
+
+.leiste-logo span {
+    display: inline-block;
+    padding: 8px 20px;
+    font-size: 1.4em;
+    letter-spacing: 1px;
+    background: rgba(10, 25, 40, 0.7);
+    border: 1px solid rgba(0, 170, 255, 0.5);
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.leiste-form-container {
+    padding: 15px;
+    border-top: 1px solid #555;
+    flex-shrink: 0;
+}
+
+#target-input {
+    width: 100%;
+    border: 1px solid #444;
+    background: #1e1e1e;
+    color: #e0e0e0;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9em;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+#target-input:focus {
+    border-color: #00aaff;
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+}
+
+.leiste-start-button {
+    width: 100%;
+    border: 2px solid #28a745;
+    background: transparent;
+    color: #28a745;
+    padding: 12px 0;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.leiste-start-button:hover {
+    background-color: #28a745;
+    color: #fff;
+    box-shadow: 0 0 15px #28a745;
+}
+
+.leiste-stopp-container {
+    padding: 15px;
+    margin-top: 1rem;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
+}
+
+.leiste-stopp-button {
+    width: 100%;
+    background-color: transparent;
+    border: 2px solid #e53935;
+    color: #e53935;
+    padding: 12px 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1em;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.15s ease-out;
+    box-shadow: 0 4px 0 #902424, 0 5px 10px rgba(0,0,0,0.5);
+}
+
+.leiste-stopp-button:hover:not(.stopp-button-pressed) {
+    box-shadow: 0 4px 0 #c02f2f, 0 5px 15px rgba(255, 50, 50, 0.4);
+    background: rgba(229, 57, 53, 0.1);
+}
+
+.leiste-stopp-button.stopp-button-pressed {
+    transform: translateY(4px);
+    background: linear-gradient(145deg, #e0e0e0, #c0c0c0);
+    border-color: #e53935;
+    color: #e53935;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.leiste-stopp-button i {
+    font-size: 1.2em;
+}
+
+.threat-intel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid #333;
+}
+
+.circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #333;
+    animation: rotate-circle 10s linear infinite;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+}
+
+.circle::before {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background-color: #1f1f1f;
+    border-radius: 50%;
+}
+
+#threat-counts-table {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.threat-count-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 80px;
+}
+
+.sev-label-small {
+    font-size: 0.8em;
+    color: #888;
+    font-weight: bold;
+}
+
+.sev-count-ops {
+    font-size: 1.0em;
+    font-weight: normal;
+}
+
+.sev-hard { color: #e53935; text-shadow: 0 0 5px #e53935; }
+.sev-medium { color: #ffa726; text-shadow: 0 0 5px #ffa726; }
+.sev-easy { color: #28a745; text-shadow: 0 0 5px #28a745; }
+.sev-info { color: #00aaff; text-shadow: 0 0 5px #00aaff; }
+
+@keyframes rotate-circle {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#active-ops-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.active-ops-header {
+    padding: 10px 15px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #888;
+    text-transform: uppercase;
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
+}
+
+.active-ops-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: #ccc;
+    font-size: 0.9em;
+    border-bottom: 1px solid #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.active-ops-item i {
+    font-size: 1em;
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+    z-index: 2;
+}
+
+.active-ops-item span {
+    z-index: 2;
+}
+
+.heartbeat {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #b48ead;
+    margin-right: 15px;
+    box-shadow: 0 0 10px #b48ead;
+    animation: pulse 1.5s infinite ease-in-out;
+    z-index: 2;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.op-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background-color: rgba(180, 142, 173, 0.15);
+    z-index: 1;
+    transition: width 0.5s linear;
+}
+
+.shutdown-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: rgba(10, 25, 40, 0.7);
+    border: 1px solid rgba(229, 57, 53, 0.5);
+    border-radius: 6px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.shutdown-table td {
+    padding: 6px 4px;
+    font-size: 0.75em;
+    border-bottom: 1px solid rgba(229, 57, 53, 0.2);
+    vertical-align: middle;
+    color: #ccc;
+}
+
+.shutdown-table td:first-child {
+    text-align: left;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+.shutdown-table td:last-child {
+    width: 65px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.shutdown-table tr:last-child td {
+    border-bottom: none;
+}
+
+.shutdown-status-canceled {
+    color: #e53935;
+    font-weight: bold;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

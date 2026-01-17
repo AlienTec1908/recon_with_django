@@ -1,0 +1,87 @@
+# Core Web Frameworks
+Frameworks:
+  WordPress:
+    - wp-admin
+    - wp-content
+    - wp-includes
+    - wp-json
+  Joomla:
+    - joomla
+    - /administrator/
+  Drupal:
+    - /user/login
+    - /core/
+    - sites/default/files
+  Magento:
+    - /admin/
+    - /downloader/
+    - /static/frontend/
+  Laravel:
+    - /storage/logs/laravel.log
+    - X-Powered-By: Laravel
+  Symfony:
+    - /_profiler/
+  Django:
+    - /admin/login/
+    - static/admin/
+  React:
+    - static/js/main
+    - static/js/app
+  Angular:
+    - main.js
+    - polyfills.js
+
+# API Specifications & Frameworks
+API_Specs_And_Frameworks:
+  GraphQL:
+    - /graphql
+    - /graphiql
+    - /graphql.php
+    - /graphql/console
+  Swagger_OpenAPI:
+    - /swagger
+    - /swagger-ui
+    - /swagger-ui.html
+    - /api-docs
+    - /openapi.json
+    - /swagger.json
+
+# CI/CD, Code Repositories & DevOps Platforms
+CI_CD_And_Repos:
+  GitLab:
+    - /-/health
+    - /users/sign_in
+    - /explore
+  GitHub_Enterprise:
+    - /login
+    - /p/
+  Jenkins:
+    - /j_acegi_security_check
+    - /login
+    - /static/
+  Bitbucket:
+    - /j_atl_security_check
+    - /projects
+  Artifactory:
+    - /artifactory/webapp/
+
+# Authentication & Authorization Frameworks
+Authentication:
+  OAuth2_OIDC:
+    - /.well-known/openid-configuration
+    - /.well-known/oauth-authorization-server
+    - /oauth/token
+    - /authorize
+  Keycloak:
+    - /auth/realms/
+  CAS:
+    - /cas/login
+
+# Cloud Services & Metadata
+Cloud_And_Metadata:
+  AWS_Metadata:
+    - /latest/meta-data/
+  Azure_Metadata:
+    - /metadata/instance
+  GCP_Metadata:
+    - /computeMetadata/v1/

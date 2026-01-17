@@ -1,0 +1,103 @@
+#top-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+}
+#target-info-card,
+#findings-system {
+    border-radius: 14px;
+    padding: 10px 12px;
+    position: relative;
+    overflow: hidden;
+    background: rgba(10, 25, 40, 0.5);
+    border: 1px solid rgba(0, 170, 255, 0.2);
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+}
+#target-info-card::before,
+#findings-system::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    left: -40%;
+    width: 180%;
+    height: 180%;
+    background: radial-gradient(circle at top left, rgba(0, 170, 255, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+}
+#target-info-card:hover,
+#findings-system:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.45), inset 0 2px 3px rgba(255,255,255,0.3);
+}
+#target-info-card {
+    flex-shrink: 0;
+}
+#findings-system {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+#target-info-card h2 {
+    margin-top: 0;
+    margin-bottom: 6px;
+    color: #00aaff;
+    border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+    padding-bottom: 6px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    font-size: 1.1em;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 5px;
+    border-bottom: 1px solid rgba(0, 170, 255, 0.1);
+    font-size: 0.9em;
+}
+.info-row:last-child {
+    border-bottom: none;
+}
+.info-label {
+    font-weight: bold;
+    color: #88c0d0;
+}
+.findings-category {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+.findings-category:last-child {
+    margin-bottom: 0;
+}
+.category-label {
+    width: 100px;
+    font-weight: bold;
+    color: #00aaff;
+    flex-shrink: 0;
+    font-size: 0.9em;
+    padding-top: 4px;
+}
+.pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 5px 8px;
+    border-top: 1px solid rgba(0, 170, 255, 0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.finding-pill {
+    padding: 2px 7px;
+    margin: 2px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.placeholder-pill {
+    color: #555;
+    font-style: italic;
+    padding: 2px 0;
+    font-size: 0.85em;
+}

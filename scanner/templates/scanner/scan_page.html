@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Recon für {{ target }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+        h1, h3 { color: #00bcd4; border-bottom: 1px solid #00bcd4; padding-bottom: 5px; }
+        .live-banner, .scan-status-container { background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .finding-category { margin-bottom: 10px; }
+        .finding-category strong { display: inline-block; width: 120px; color: #888; }
+        .pill { display: inline-block; padding: 4px 10px; margin: 2px 4px 2px 0; color: #000; background-color: #00bcd4; border-radius: 6px; font-size: 0.9em; font-weight: 500; }
+        .scan-status-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #333; }
+        .scan-status-item:last-child { border-bottom: none; }
+        .scan-status-item .status-text { color: #bbb; }
+        .stop-button { background-color: #d32f2f; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .stop-button:disabled { background-color: #555; cursor: not-allowed; }
+        .status-finished { color: #4caf50; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Live Recon für: {{ target }}</h1>
+
+        <div id="live-banner" class="live-banner">
+            <h3>Live Findings</h3>
+            <div id="findings-container"></div>
+        </div>
+
+        <div id="scan-status-container" class="scan-status-container">
+            <h3>Scan Status</h3>
+        </div>
+    </div>
+
+    <script>
+        const target = "{{ target }}";
+        const wsUrl = "{{ websocket_url }}";
+        const socket = new WebSocket(wsUrl);
+
+        const findingsContainer = document.getElementById('findings-container');
+        const statusContainer = document.getElementById('scan-status-container');
+
+        socket.onopen = () => {
+            socket.send(JSON.stringify({ command: "start_scan", target: target }));
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            switch (data.type) {
+                case "finding":
+                    handleFinding(data);
+                    break;
+                case "status":
+                    handleStatus(data);
+                    break;
+            }
+        };
+
+        socket.onclose = () => {
+            console.log("WebSocket-Verbindung geschlossen.");
+        };
+
+        function getOrCreateFindingCategory(category) {
+            const categoryId = `finding-category-${category}`;
+            let categoryDiv = document.getElementById(categoryId);
+            if (!categoryDiv) {
+                categoryDiv = document.createElement('div');
+                categoryDiv.id = categoryId;
+                categoryDiv.className = 'finding-category';
+                categoryDiv.innerHTML = `<strong>${category.charAt(0).toUpperCase() + category.slice(1)}:</strong>`;
+                findingsContainer.appendChild(categoryDiv);
+            }
+            return categoryDiv;
+        }
+
+        function handleFinding(data) {
+            let category = data.category;
+            if (data.value === "cookie") {
+                category = "cookies";
+            }
+            const categoryDiv = getOrCreateFindingCategory(category);
+            const pill = document.createElement('span');
+            pill.className = 'pill';
+            pill.textContent = data.value;
+            categoryDiv.appendChild(pill);
+        }
+
+        function handleStatus(data) {
+            const statusItemId = `status-item-${data.scan_id}`;
+            let statusItem = document.getElementById(statusItemId);
+
+            if (!statusItem) {
+                statusItem = document.createElement('div');
+                statusItem.id = statusItemId;
+                statusItem.className = 'scan-status-item';
+                statusContainer.appendChild(statusItem);
+            }
+
+            if (data.line === "--- Starte Scan ---") {
+                statusItem.innerHTML = `
+                    <span>${data.scan_display_name}</span>
+                    <button class="stop-button" data-scan-id="${data.scan_id}">Stop</button>
+                `;
+                statusItem.querySelector('.stop-button').onclick = (e) => {
+                    stopScan(e.target.dataset.scanId);
+                };
+            } else if (data.line === "--- Scan abgeschlossen ---") {
+                statusItem.innerHTML = `
+                    <span>${statusItem.querySelector('span').textContent}</span>
+                    <span class="status-text status-finished">Abgeschlossen</span>
+                `;
+            }
+        }
+
+        async function stopScan(scanId) {
+            const button = document.querySelector(`button[data-scan-id="${scanId}"]`);
+            if (button) {
+                button.disabled = true;
+                button.textContent = "Stopping...";
+            }
+
+            try {
+                const response = await fetch(`/api/scans/${scanId}/stop`, { method: 'POST' });
+                if (response.ok) {
+                    const statusItem = document.getElementById(`status-item-${scanId}`);
+                    if (statusItem) {
+                         statusItem.innerHTML = `
+                            <span>${statusItem.querySelector('span').textContent}</span>
+                            <span class="status-text">Gestoppt</span>
+                        `;
+                    }
+                }
+            } catch (error) {
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = "Stop";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
