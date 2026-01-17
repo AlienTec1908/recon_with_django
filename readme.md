@@ -15,6 +15,95 @@ Hands-off scanning · Live findings · Senior-grade workflows
 ![GitHub Stars](https://img.shields.io/github/stars/AlienTec1908/recon_with_django?style=social)
 
  
+---
+
+## 🖥️ Web GUI — How to Use (Phase 1)
+
+### 🌐 Start the Web Interface
+
+Make sure **both services are running**:
+
+```bash
+# Django (Frontend)
+python manage.py runserver 127.0.0.1:8000
+
+# Orchestrator / Scan Engine
+uvicorn engine_api:app --reload --port 8001
+```
+
+---
+
+### 🌍 Open the GUI in Your Browser
+
+Open your browser and navigate to:
+
+```
+http://127.0.0.1:8000
+```
+
+This loads the **AlienTec Live Recon Interface (Phase 1)**.
+
+---
+
+### 🎯 Starting a Scan
+
+1. Locate the **Target Input Field** in the OPS Panel (left side)
+
+2. Enter a **target IP address or domain name**
+
+   Examples:
+
+   ```
+   192.168.1.10
+   scanme.nmap.org
+   ```
+
+3. Click **Start Scan**
+
+---
+
+### ⚙️ What Happens After Clicking “Start Scan”
+
+* The GUI sends the target to the **Phase‑1 Orchestrator**
+* The orchestrator launches:
+
+  * Nmap Full Port Scan
+  * UDP / IPv6 scans (if enabled)
+* Live Findings, HUD Panel, OPS Panel and Progress Bar update **in real time**
+* Discovered services appear immediately in the **Live‑Finding System**
+* Severity counters and task states update dynamically
+
+No manual interaction is required after pressing **Start Scan**.
+
+---
+
+### 🛑 Stop Scan (Emergency)
+
+* Press **Stop Scan** in the OPS Panel
+* The orchestrator terminates all running tasks cleanly
+
+---
+
+## 📍 Where to Place This Section in the README
+
+👉 **Insert this section directly AFTER:**
+
+```
+## 🚀 Running the Framework (Phase 1)
+```
+
+and **BEFORE:**
+
+```
+## ▶️ How Phase 1 Works (Operational Flow)
+```
+
+So the flow for the reader is:
+
+1. Install
+2. Start services
+3. **Use the GUI**
+4. Understand orchestration
 
 ---
 
