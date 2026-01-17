@@ -46,7 +46,13 @@ Phase 1 is intentionally released as a **reduced showcase** to demonstrate archi
 
 ---
 
-## 🧩 Requirements
+## 🧩 Requirements 
+
+| Area | Source | Components | Notes |
+|-----|--------|------------|-------|
+| 🖥️ System Tools | `install.sh` | `nmap`, `nikto`, `feroxbuster`, `curl` | Installed via system package manager |
+| 📚 Wordlists | `install.sh` | `seclists` | Expected at `/usr/share/seclists` |
+| 🐍 Python | `requirements.txt` | Python dependencies | Installed via `pip` (venv) |
 
 - 🐧 Linux (recommended: Kali Linux)  
 - 🐍 Python 3.11+  
