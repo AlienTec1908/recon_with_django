@@ -44,7 +44,23 @@ http://127.0.0.1:8000
 This loads the **AlienTec Live Recon Interface (Phase 1)**.
 
 ---
+## 🖥️ GUI Walkthrough & Screenshot
 
+📸 **Screenshot – Meltdown Web Interface**
+
+1. Phase 1
+<p align="center">
+  <img src="AlienTec4.jpg" alt="AlienTec Live Recon Cover" width="50%" style="height: 20rem;">
+</p>
+
+
+2. Phase 2 
+
+<p align="center">
+  <img src="AlienTec3.jpg" alt="AlienTec Live Recon Cover" width="50%" style="height: 20rem;">
+</p>
+
+---
 ### 🎯 Starting a Scan
 
 1. Locate the **Target Input Field** in the OPS Panel (left side)
