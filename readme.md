@@ -144,13 +144,13 @@ Run the following commands to set up the engine:
 
 # 1. Make the script executable
 
-```bash
+```
 chmod +x install.sh
 ```
 
 # 2. Run the installer (root privileges required for SecLists & system deps)
 
-```bash
+```
 sudo ./install.sh
 ````
 
@@ -158,7 +158,7 @@ sudo ./install.sh
 The script checks for external scanning tools (e.g. `nmap`, `feroxbuster`, `nikto`).
 If missing, it will warn you and you must install them manually, for example:
 
-```bash
+```
 sudo apt install nmap feroxbuster nikto
 ```
 
@@ -179,7 +179,7 @@ If you want to use custom wordlists or store them in a different directory, you 
 
 1. Open the following file:
 
-```bash
+```
 nano recon_engine/scans.py
 ```
 
