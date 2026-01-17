@@ -207,7 +207,7 @@ nano recon_engine/scans.py
         "--output", "logs/{TARGET}/ferox_common.json"
     ]
 },
-```
+````
 
 **After (custom wordlist path):**
 
