@@ -141,11 +141,16 @@ This repository includes an `install.sh` script to automate the setup process. I
 
 Run the following commands to set up the engine:
 
-```bash
+
 # 1. Make the script executable
+
+```bash
 chmod +x install.sh
+```
 
 # 2. Run the installer (root privileges required for SecLists & system deps)
+
+```bash
 sudo ./install.sh
 ````
 
@@ -220,10 +225,7 @@ nano recon_engine/scans.py
     ]
 },
 ```
-
-```
-```
-
+ 
 This repository currently contains **Phase 1 (Live Recon Showcase)** of the **AlienTec Django Recon Framework**.
 
 * ✅ Phase 1: **Active Recon + Live Visualization**
