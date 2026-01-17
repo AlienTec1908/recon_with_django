@@ -126,7 +126,7 @@ So the flow for the reader is:
 # ⚙️ Installation & Operation — Phase 1
 
 ## 📌 Scope of This Repository
-````markdown
+ 
 ## 🛠️ Installation & Setup
 
 ### 1. Automatic Installation
