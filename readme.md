@@ -126,6 +126,103 @@ So the flow for the reader is:
 # ⚙️ Installation & Operation — Phase 1
 
 ## 📌 Scope of This Repository
+````markdown
+## 🛠️ Installation & Setup
+
+### 1. Automatic Installation
+
+This repository includes an `install.sh` script to automate the setup process. It performs the following tasks:
+
+- **System Checks**: Verifies root privileges and required system dependencies  
+- **Python Setup**: Creates a virtual environment (`venv`) and installs requirements  
+- **Database**: Initializes the Django database and static files  
+- **SecLists**: Checks for `/usr/share/seclists`  
+  - If missing, installs via `apt` or clones from GitHub automatically
+
+Run the following commands to set up the engine:
+
+```bash
+# 1. Make the script executable
+chmod +x install.sh
+
+# 2. Run the installer (root privileges required for SecLists & system deps)
+sudo ./install.sh
+````
+
+**Note:**
+The script checks for external scanning tools (e.g. `nmap`, `feroxbuster`, `nikto`).
+If missing, it will warn you and you must install them manually, for example:
+
+```bash
+sudo apt install nmap feroxbuster nikto
+```
+
+---
+
+### 2. Configuring Wordlists (Manual)
+
+In the current version, wordlist paths are hardcoded in the source code.
+By default, the engine expects SecLists at:
+
+```
+/usr/share/seclists/
+```
+
+If you want to use custom wordlists or store them in a different directory, you must modify the Python configuration directly.
+
+#### Step-by-Step Guide
+
+1. Open the following file:
+
+```bash
+nano recon_engine/scans.py
+```
+
+2. Locate the `SCANS_TO_RUN` variable.
+   This list defines the commands executed by each tool.
+
+3. Find the **Feroxbuster** entries and look for the `-w` (wordlist) flag.
+
+---
+
+#### Example
+
+**Before (default SecLists path):**
+
+```python
+{
+    "id": "ferox_common",
+    "name": "Feroxbuster - Common Directories",
+    "command": [
+        "feroxbuster",
+        "-u", "{URL}",
+        # CHANGE THIS LINE:
+        "-w", "/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-big.txt",
+        "-k", "--json", "--silent",
+        "--output", "logs/{TARGET}/ferox_common.json"
+    ]
+},
+```
+
+**After (custom wordlist path):**
+
+```python
+{
+    "id": "ferox_common",
+    "name": "Feroxbuster - Custom List",
+    "command": [
+        "feroxbuster",
+        "-u", "{URL}",
+        # YOUR NEW PATH:
+        "-w", "/home/user/my_wordlists/custom_dic.txt",
+        "-k", "--json", "--silent",
+        "--output", "logs/{TARGET}/ferox_common.json"
+    ]
+},
+```
+
+```
+```
 
 This repository currently contains **Phase 1 (Live Recon Showcase)** of the **AlienTec Django Recon Framework**.
 
