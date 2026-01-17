@@ -152,7 +152,7 @@ chmod +x install.sh
 
 ```
 sudo ./install.sh
-````
+```
 
 **Note:**
 The script checks for external scanning tools (e.g. `nmap`, `feroxbuster`, `nikto`).
