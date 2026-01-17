@@ -6,132 +6,187 @@
   <img src="AlienTec_Django_Recon1.png" alt="AlienTec Live Recon Cover" width="50%" style="height: 20rem;">
 </p>
 
-<p align="center">
-  <b>Autonomous Recon Framework for Offensive Security</b><br>
-  Hands-off scanning · Live findings · Senior-grade workflows
-</p>
+**🛰️ Autonomous Recon Framework for Offensive Security**
+Hands-off scanning · Live findings · Senior-grade workflows
 
-<p align="center">
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
-  <img src="https://img.shields.io/badge/Platform-Linux-lightgrey.svg" alt="Platform">
-  <img src="https://img.shields.io/badge/Status-Phase%201%20Live%20/%20Phase%202--3%20Dev-orange.svg" alt="Status">
-  <img src="https://img.shields.io/github/stars/AlienTec1908/recon_with_django?style=social" alt="GitHub Stars">
-</p>
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+![Platform](https://img.shields.io/badge/Platform-Linux-lightgrey.svg)
+![Status](https://img.shields.io/badge/Status-Phase%201%20Live%20/%20Phase%202--3%20Dev-orange.svg)
+![GitHub Stars](https://img.shields.io/github/stars/AlienTec1908/recon_with_django?style=social)
 
 ---
 
-## 🔥 AlienTec – Phase 1 (Showcase Release)
+## 🧬 Overview
 
-**AlienTec** is an autonomous recon framework for offensive security, built from real-world pentesting workflows.  
-This repository contains **only Phase 1**, released as a **reduced showcase version** to demonstrate architecture, orchestration, and UI flow.
+**AlienTec Django Recon** is a **modular, event-driven reconnaissance framework** built for
+🧑‍💻 **professional offensive security** and **real-world recon operations**.
 
-This is **not** the full product.
+Core philosophy:
 
----
+* 🧠 Logic-driven orchestration
+* 🔁 Live signal feedback
+* ⚙️ Rule-based scan execution
+* 🚫 No blind or useless scans
 
-## 🧠 Purpose of Phase 1
-
-Phase 1 represents the **foundation of the entire framework**:
-
-- Target initialization (IP / scope)
-- Automated recon pipeline
-- Live parsing of scan outputs
-- Real-time web UI updates
-- Central orchestration logic
-
-👉 Focus: **Reconnaissance, not exploitation**
+This repository exposes **Phase 1 only** as a **controlled showcase release**.
 
 ---
 
-## ⚙️ Core Architecture (Phase 1)
+## 🧱 Project Scope
 
-- **Orchestrator**
-  - Central control unit
-  - Starts, monitors, and sequences all scans
-  - Reacts to live findings (e.g. HTTP service discovered)
+This repository includes:
 
-- **IP Start Scan**
-  - Triggers the initial scan chain
-  - Produces ports, services, and base intelligence
+* ⚙️ **Phase 1 – Core Recon Orchestration** *(implemented)*
+* 🧪 **Phase 2 – Deep Enumeration Subroutines (45+ modules)** *(in development)*
+* 📊 **Phase 3 – Reporting, Correlation & Intelligence Layer** *(planned)*
 
-- **Live Parser**
-  - Continuously parses scan outputs
-  - Writes structured JSON findings
-  - Acts as a signal source for follow-up scans
-
-- **Tab System (UI)**
-  - Dynamically builds scan tabs
-  - Displays only context-relevant scans
-  - No useless or dead modules
-
-- **HUD / OPS Panel**
-  - Running tasks
-  - Progress tracking
-  - Severity overview
+Only **Phase 1** is active in this public version.
 
 ---
 
-## 🚧 Project Status
+## ⚙️ Phase 1 – Architecture Overview
 
-### ✅ Phase 1 – **Live (this repository)**
-- Fully integrated recon pipeline
-- Orchestrator-driven scan logic
-- Live UI with findings and tabs
-- **Showcase / reduced version**
+Phase 1 introduces a **central Orchestrator** acting as a
+🧠 **rule engine**, 🛰️ **signal router**, and ⚙️ **execution controller**.
 
-### 🛠️ Phase 2 – **In Development**
-- ~45 subroutines / modules
-- Deep service & web analysis
-- Context-aware scan chaining
-- **Not included**
+The Orchestrator:
 
-### 📄 Phase 3 – **Planned**
-- Reporting engine
-- Structured findings
-- Pentest-ready client reports
-- **Not included**
+* 📂 Loads system logic definitions
+* 🧩 Builds execution chains dynamically
+* 🧪 Validates scan prerequisites
+* 📡 Reacts to live findings
+* 🔒 Blocks invalid execution paths
+
+No scan runs without context.
 
 ---
 
-## ⚠️ Important Notice
+## 🧩 Core Systems (Phase 1)
 
-This repository is **not a full release** of AlienTec.
+### 🧭 1. Start Scan System (Entry Point)
 
-- No complete scan set
-- No reporting engine
-- No Phase 2 logic
-- Purpose: **architecture, orchestration, and design showcase**
+* 🎯 Accepts target input (IP / range)
+* 🚀 Triggers orchestration
+* 🧠 Hands control to the Orchestrator immediately
+* 🚫 Executes **no scans directly**
 
-The reduced scope is intentional.
+Purpose:
+A clean, logic-free entry layer.
 
 ---
 
-## 🧩 Design Philosophy
+### 🧠 2. Orchestrator (Central Control Layer)
 
-AlienTec follows strict principles:
+The Orchestrator is the **core intelligence layer**.
 
-- Senior-grade workflows
-- No blind or noisy scanning
-- Context over brute force
-- Orchestration over script chaos
-- Built from real pentest experience
+Responsibilities:
+
+* 🧾 Parse all system logic files
+* 🧮 Build ordered execution lists
+* 🧠 Enforce rule conditions
+* 📊 Track scan state
+* 🔁 Dispatch scans
+* 📡 Receive live parser signals
+
+It decides **what runs, when, and why**.
+
+---
+
+### 📡 3. Live Parser System
+
+* 🔍 Parses scan output in real time
+* 🧬 Extracts high-value signals
+* 🧾 Normalizes findings into JSON
+* 📡 Signals the Orchestrator
+
+Examples:
+
+* 🌐 HTTP / HTTPS detected
+* 🛠️ Service identified
+* ✅ Scan completed
+* 🚫 Scan useless → blocked
+
+---
+
+### 🗂️ 4. Tab System (Contextual Dispatcher)
+
+The Tab System is **execution-only**, not decision-making.
+
+It:
+
+* 🧠 Receives commands from the Orchestrator
+* 🧵 Spawns scans in isolated tabs
+* 🌐 Binds scans to valid services
+* 🧼 Keeps logic clean and separated
+
+Tabs appear **only when justified**.
+
+---
+
+### 🖥️ 5. UI Layer (Phase 1 Scope)
+
+The UI is **read-only intelligence**, not control logic.
+
+Displays:
+
+* ⚙️ Active scans
+* 📄 Finished scans
+* 📡 Live findings
+* 🧵 Context-based tabs
+* 🧠 Execution order visibility
+
+---
+
+## 🔁 Execution Flow (Simplified)
+
+1. ▶️ User presses **Start**
+2. 🧠 Orchestrator parses system logic
+3. ⚙️ Initial recon validated & launched
+4. 📡 Live parser extracts signals
+5. 🧠 Orchestrator evaluates conditions
+6. 🌐 Contextual scans unlocked
+7. 🗂️ Tabs spawn valid scans
+8. 📊 Results update continuously
+
+---
+
+## 🧠 Design Rationale
+
+This architecture avoids:
+
+* 🚫 Blind scan chains
+* 🚫 Hardcoded pipelines
+* 🚫 Tool spamming
+* 🚫 Context-less execution
+
+It enables:
+
+* 🧠 Senior-grade recon logic
+* 🛰️ Environment awareness
+* 📉 High signal-to-noise ratio
+* 🧩 Clean Phase 2 & 3 expansion
+
+---
+
+## ⚠️ Disclaimer
+
+This framework is intended for:
+
+* 🎓 Education
+* 🧪 Research
+* 🛡️ Authorized security testing only
+
+You **must** have explicit permission to scan any target.
+
+The author assumes **no responsibility** for misuse or legal violations.
 
 ---
 
 ## 📜 License
 
-MIT License – see `LICENSE`.
+MIT License
+See `LICENSE` for details.
 
 ---
 
-## ⭐ Support
-
-If you like the project:
-- ⭐ Star the repository
-- Follow ongoing development
-- Phase 2 & 3 will follow once the architecture is finalized
-
----
-
-**AlienTec**  
-_Built from real battles, not from theory._
+ 
